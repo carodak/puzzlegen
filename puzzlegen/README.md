@@ -57,11 +57,12 @@ This script demonstrates how to generate, solve, and save puzzles using the `puz
 ---
 
 ## Project Structure
-src/puzzlegen/core/ – Core logic (generation, solver, batch, etc.)
-src/puzzlegen/frontend.py – Simple interface for users
-examples/ – Example notebooks and scripts
-tests/ – Unit tests
-outputs/ - Generated puzzles
+
+- `src/puzzlegen/core/` – Core logic (puzzle generation, solver, batch processing, etc.)
+- `src/puzzlegen/frontend.py` – User-friendly interface for puzzle creation and batch operations
+- `examples/` – Example notebooks and scripts to help you get started
+- `tests/` – Unit tests for code reliability
+- `outputs/` – Folder where generated puzzles and results are saved
 
 ---
 
