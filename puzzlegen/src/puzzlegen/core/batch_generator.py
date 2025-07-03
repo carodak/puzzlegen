@@ -218,46 +218,17 @@ class PuzzleBatchGenerator:
         self.save_file(filename)
 
 
-import os
-import shutil
-from IPython.display import display, FileLink
-
-class FileManager:
-    @staticmethod
-    def save_file(filename):
+    def save_file(self, filename):
         """
-        Save a file to the appropriate location depending on the environment:
-        - In Google Colab: triggers browser download.
-        - In Jupyter/Notebook environments: saves to 'outputs/' and shows a download link.
-        - In standard Python: saves to 'outputs/' folder inside the package.
+        Save a file either locally (in 'outputs' folder) or download in browser if running in Jupyter/Colab.
 
         Args:
             filename (str): Name of the file to save.
         """
-        try:
-            shell = get_ipython().__class__.__name__
-        except NameError:
-            shell = None
-
-        # Google Colab detection
-        if shell == 'ZMQInteractiveShell' and 'google.colab' in str(get_ipython()):
+        if 'google.colab' in str(get_ipython()):
             from google.colab import files
             files.download(filename)
-            print("Running in Google Colab — downloading in browser.")
-            return
-
-        # General Jupyter / Notebook environment (JupyterLab, VSCode, etc.)
-        elif shell == 'ZMQInteractiveShell':
-            outputs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'outputs'))
-            os.makedirs(outputs_dir, exist_ok=True)
-
-            destination = os.path.join(outputs_dir, filename)
-            shutil.move(filename, destination)
-            print(f"File saved to: {destination}")
-            display(FileLink(destination))  # Makes a clickable download link
-            return
-
-        # Standard Python script
+            print("Looks like we are on google colab so we file would be saved on our Kernel")
         else:
             outputs_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'outputs'))
             os.makedirs(outputs_dir, exist_ok=True)
@@ -265,3 +236,8 @@ class FileManager:
             destination = os.path.join(outputs_dir, filename)
             shutil.move(filename, destination)
             print(f"File saved locally in: {destination}")
+        #else:
+        #    current_dir = os.getcwd()
+        #    new_file_path = os.path.join(current_dir, filename)
+        #    os.rename(filename, new_file_path)
+        #    print(f"File saved locally at: {new_file_path}")

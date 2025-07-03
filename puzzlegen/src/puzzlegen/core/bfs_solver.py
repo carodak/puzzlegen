@@ -1,4 +1,3 @@
-#######
 import logging
 from collections import deque
 from matplotlib import pyplot as plt
