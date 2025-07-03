@@ -1,9 +1,5 @@
-# puzzlegen
-
-**Procedural Match-3 Puzzle Generator and Solver**  
+# puzzlegen - Procedural Match-3 Puzzle Generator and Solver 
 Developed by Caroline DAKOURE
-
----
 
 ## Overview
 
@@ -11,6 +7,7 @@ Developed by Caroline DAKOURE
 It allows you to create single puzzles or batches, visualize them, and automatically find solutions using a Breadth-First Search (BFS) solver.
 
 <img src="https://github.com/carodak/puzzlegen/blob/main/doc/puzzle-gen.png">
+
 ---
 
 ## Features
@@ -47,7 +44,7 @@ This script demonstrates how to generate, solve, and save puzzles using the `puz
 ## Puzzle Rules
 
 1. **Puzzle Setup**: The game board is a grid with colored blocks. Blocks are initially placed in the last row or stacked on top of each other. No more than 2 blocks of the same color are aligned horizontally or vertically. Each color must have at least 3 blocks.
-2. **Game Play**: The goal is to remove all blocks from the grid in as few moves as possible.
+2. **GamePlay**: The goal is to remove all blocks from the grid in as few moves as possible.
 3. **Available Moves**:
     - *Simple Move*: Move a block left or right if the target cell is empty.
     - *Exchange*: Swap a block with its left or right neighbor if the target cell is occupied.
