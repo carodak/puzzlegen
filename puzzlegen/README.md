@@ -10,6 +10,7 @@ Developed by Caroline DAKOURE
 `puzzlegen` is a Python package for generating, visualizing, and solving procedural Match-3 puzzles, designed for cognitive science and executive functioning tasks.  
 It allows you to create single puzzles or batches, visualize them, and automatically find solutions using a Breadth-First Search (BFS) solver.
 
+<img src="https://github.com/carodak/puzzlegen/blob/main/doc/puzzle-gen.png">
 ---
 
 ## Features
@@ -43,7 +44,7 @@ This script demonstrates how to generate, solve, and save puzzles using the `puz
 
 ---
 
-## Executive Functioning Task - Puzzle Rules
+## Puzzle Rules
 
 1. **Puzzle Setup**: The game board is a grid with colored blocks. Blocks are initially placed in the last row or stacked on top of each other. No more than 2 blocks of the same color are aligned horizontally or vertically. Each color must have at least 3 blocks.
 2. **Game Play**: The goal is to remove all blocks from the grid in as few moves as possible.
@@ -53,6 +54,8 @@ This script demonstrates how to generate, solve, and save puzzles using the `puz
 4. **Elimination Rule**: If 3 or more blocks of the same color are aligned horizontally or vertically, they disappear.
 5. **Gravity Rule**: Blocks fall down if unsupported until they reach another block or the bottom of the grid.
 6. **Winning Condition**: All blocks are removed from the grid within the allowed number of moves.
+
+Executive Function Task Reference: https://osf.io/3pz74/wiki/home/
 
 ---
 
@@ -81,9 +84,13 @@ Please add tests for any new features.
 - [Visualgo BFS/DFS](https://visualgo.net/en/dfsbfs)
 - [What is BFS? (dev.to)](https://dev.to/lukegarrigan/what-is-bfs-breadth-first-search-nad)
 
+---
+
 ## License
 
 MIT License
+
+---
 
 **Contact:**  
 caroline.dakoure@umontreal.ca
