@@ -1,4 +1,4 @@
-# puzzlegen: Procedural Match-3 Puzzle Generator and Solver 
+# puzzlegen - Procedural Match-3 Puzzle Generator 
 Developed by Caroline DAKOURE
 
 ## Overview
