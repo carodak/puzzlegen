@@ -1,9 +1,9 @@
-# puzzlegen - Procedural Match-3 Puzzle Generator and Solver 
+# puzzlegen: Procedural Match-3 Puzzle Generator and Solver 
 Developed by Caroline DAKOURE
 
 ## Overview
 
-`puzzlegen` is a Python package for generating, visualizing, and solving procedural Match-3 puzzles, designed for cognitive science and executive functioning tasks.  
+`puzzlegen` is a Python package for generating, visualizing, and solving procedural Match-3 puzzles.
 It allows you to create single puzzles or batches, visualize them, and automatically find solutions using a Breadth-First Search (BFS) solver.
 
 <img src="https://github.com/carodak/puzzlegen/blob/main/doc/puzzle-gen.png">
