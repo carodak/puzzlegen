@@ -13,7 +13,6 @@ from puzzlegen.core.grid_initializer import GridInitializer
 from puzzlegen.core.puzzle_logic import PuzzleLogic
 from tqdm import tqdm
 from .utils import print_framed
-
 logging.getLogger().setLevel(logging.INFO)
 logger = logging.getLogger(__name__)
 

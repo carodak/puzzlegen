@@ -6,7 +6,6 @@ from matplotlib.patches import FancyArrowPatch
 from tqdm import tqdm
 from .utils import print_framed
 import textwrap
-
 logging.getLogger().setLevel(logging.INFO)
 logger = logging.getLogger(__name__)
 
