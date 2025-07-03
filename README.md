@@ -27,6 +27,10 @@ It allows you to create single puzzles or batches, visualize them, and automatic
 ```bash
 pip install puzzlegen
 ```
+Or, if you want to install from the github repository that may contain more up-to-date versions:
+```bash
+pip install git+https://github.com/carodak/puzzlegen.git
+```
 Or, if you want to clone and install locally:
 ```bash
 git clone https://github.com/carodak/puzzlegen.git
@@ -82,7 +86,7 @@ batch.save_csv("batch_puzzles.csv")
 ```
 
 ### Other option
-You may also use the package directly from the Jupyter notebooks in examples/basic_usage.ipynb — no installation required.
+You may also use the package directly from the Jupyter notebooks in `examples/basic_usage.ipynb` — no installation required.
 
 ### For additional detailed usage examples, please see:
 
