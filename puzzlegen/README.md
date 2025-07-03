@@ -32,12 +32,16 @@ cd puzzlegen
 pip install .
 ```
 
+---
+
 ## Basic Usage
 For detailed usage examples, please see:
 
 `examples/basic_usage.py`
 
 This script demonstrates how to generate, solve, and save puzzles using the `puzzlegen` package.
+
+---
 
 ## Executive Functioning Task - Puzzle Rules
 
@@ -50,6 +54,8 @@ This script demonstrates how to generate, solve, and save puzzles using the `puz
 5. **Gravity Rule**: Blocks fall down if unsupported until they reach another block or the bottom of the grid.
 6. **Winning Condition**: All blocks are removed from the grid within the allowed number of moves.
 
+---
+
 ## Project Structure
 src/puzzlegen/core/ – Core logic (generation, solver, batch, etc.)
 src/puzzlegen/frontend.py – Simple interface for users
@@ -57,11 +63,14 @@ examples/ – Example notebooks and scripts
 tests/ – Unit tests
 outputs/ - Generated puzzles
 
+---
 
 ## Contributing
 
 Pull requests and suggestions are welcome!  
 Please add tests for any new features.
+
+---
 
 ## Resources
 
