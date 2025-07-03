@@ -119,6 +119,8 @@ Executive Function Task Reference: https://osf.io/3pz74/wiki/home/
 - `tests/` – Unit tests for code reliability
 - `outputs/` – Folder where generated puzzles and results are saved
 
+The API Documentation is available in `docs` folder.
+
 ---
 
 ## Contributing
