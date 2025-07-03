@@ -8,7 +8,7 @@ Github Repository: https://github.com/carodak/puzzlegen/
 `puzzlegen` is a Python package for generating, visualizing, and solving procedural Match-3 puzzles.
 It allows you to create single puzzles or batches, visualize them, and automatically find solutions using a Breadth-First Search (BFS) solver.
 
-<img src="https://github.com/carodak/puzzlegen/blob/main/docs/assets/puzzle-gen.png">
+<img src="https://raw.githubusercontent.com/carodak/puzzlegen/refs/heads/main/docs/assets/puzzle-gen.png">
 
 ---
 
