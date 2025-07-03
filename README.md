@@ -2,6 +2,7 @@
 Developed by Caroline DAKOURE
 
 Github Repository: https://github.com/carodak/puzzlegen/
+PyPi Project: https://pypi.org/project/puzzlegen/
 
 ## Overview
 
@@ -119,7 +120,11 @@ Executive Function Task Reference: https://osf.io/3pz74/wiki/home/
 - `tests/` – Unit tests for code reliability
 - `outputs/` – Folder where generated puzzles and results are saved
 
-The API Documentation is available in `docs` folder.
+---
+
+## API Documentation
+
+The API Documentation is available at https://carodak.github.io/puzzlegen/puzzlegen.html or in `docs` folder.
 
 ---
 
