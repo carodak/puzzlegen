@@ -1,6 +1,8 @@
 # puzzlegen - Procedural Match-3 Puzzle Generator 
 Developed by Caroline DAKOURE
 
+Github Repository: https://github.com/carodak/puzzlegen/
+
 ## Overview
 
 `puzzlegen` is a Python package for generating, visualizing, and solving procedural Match-3 puzzles.
@@ -23,8 +25,10 @@ It allows you to create single puzzles or batches, visualize them, and automatic
 ## Installation
 
 ```bash
-pip install matplotlib
-# Or, if you want to install from source:
+pip install puzzlegen
+```
+Or, if you want to clone and install locally:
+```bash
 git clone https://github.com/carodak/puzzlegen.git
 cd puzzlegen
 pip install .
@@ -33,9 +37,56 @@ pip install .
 ---
 
 ## Basic Usage
-For detailed usage examples, please see:
 
-`examples/basic_usage.py`
+### Example 1: Randomly generate and solve a single puzzle
+```bash
+from puzzlegen.frontend import SinglePuzzle
+
+# 1. Create a puzzle game
+puzzle = SinglePuzzle(nb_blocks=10, colors=['red', 'blue', 'gray'], nb_moves=5, grid_size=(12, 12))
+
+# 2. Generate a random puzzle
+puzzle.generate()
+
+# 3. Display the puzzle
+puzzle.show()
+
+# 4. Attempt to solve the puzzle (i.e., find a solution within nb_moves)
+solution = puzzle.solve()
+
+# 5. Save the solution and batch as files
+puzzle.show_solution()
+```
+
+### Example 2: Generate a batch of solvable puzzles
+```bash
+from puzzlegen.frontend import PuzzleBatch
+
+# 1. Create a batch of puzzles
+batch = PuzzleBatch(
+    blocks_range=(6, 10),
+    colors_range=(2, 4),
+    colors_blocks=['blue', 'red', 'gray'],
+    nb_moves=5,
+    grid_size=(12, 6),
+    stack_probability=0.75
+)
+
+# 2. Generate the batch
+batch.generate()
+
+# 3. Show statistics and save the results
+batch.show_stats()
+batch.save_pdf("batch_puzzles.pdf")
+batch.save_csv("batch_puzzles.csv")
+```
+
+### Other option
+You may also use the package directly from the Jupyter notebooks in examples/basic_usage.ipynb — no installation required.
+
+### For additional detailed usage examples, please see:
+
+`examples` folder
 
 This script demonstrates how to generate, solve, and save puzzles using the `puzzlegen` package.
 
