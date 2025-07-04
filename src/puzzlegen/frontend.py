@@ -28,7 +28,7 @@ class SinglePuzzle:
         self.solution = None
 
     def generate(self):
-        """Initialize the puzzle grid with the specified configuration."""
+        """Randomly generate a puzzle grid based on the parameters defined in the SinglePuzzle instance."""
         self.grid.initialize_grid()
 
     def show(self):
@@ -37,10 +37,12 @@ class SinglePuzzle:
 
     def solve(self):
         """
-        Attempt to solve the puzzle using BFS.
+        Attempt to solve the puzzle using BFS. The search is limited to solutions within a maximum number of moves (`nb_moves`).
 
         Returns:
-            list or None: A list of moves if the puzzle is solvable; otherwise, None.
+            solution (dict or None): 
+                A dictionary containing the move history and block states leading to the solution,
+                or None if no solution exists within `nb_moves` (meaning the solution requires more moves).
         """
         self.solver = BFSSolver(self.grid, PuzzleLogic())
         is_solvable, solution = self.solver.perform_all_blocks_moves()
