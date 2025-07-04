@@ -1,9 +1,8 @@
 # puzzlegen - Procedural Match-3 Puzzle Generator 
 Developed by Caroline DAKOURE
 
-- Github Repository: https://github.com/carodak/puzzlegen/
-- PyPi Project: https://pypi.org/project/puzzlegen/
-- OSF Project: https://doi.org/10.17605/OSF.IO/HNAQ9 
+**Project Links:**  
+[GitHub Repository](https://github.com/carodak/puzzlegen/) | [PyPI Project](https://pypi.org/project/puzzlegen/) | [OSF Project](https://doi.org/10.17605/OSF.IO/HNAQ9)
 
 ## Overview
 
