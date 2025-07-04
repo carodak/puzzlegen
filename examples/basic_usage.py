@@ -9,10 +9,10 @@ from puzzlegen.frontend import SinglePuzzle, PuzzleBatch
 # Example 1: Randomly generate and solve a single puzzle
 # ----------------------------------------------------------
 
-# 1. Create a puzzle game
+# 1. Instantiate a single puzzle
 puzzle = SinglePuzzle(nb_blocks=10, colors=['red', 'blue', 'gray'], nb_moves=5, grid_size=(12, 12))
 
-# 2. Generate a random puzzle
+# 2. Generate the puzzle grid randomly
 puzzle.generate()
 
 # 3. Display the puzzle
@@ -31,13 +31,14 @@ puzzle.show_solution()
 # In this process, puzzles that cannot be solved within the specified maximum number of moves (nb_moves)
 # are automatically discarded. Only puzzles solvable in nb_moves moves or fewer are kept.
 
-# 1. Create a batch of puzzles
+# 1. Instantiate a batch of puzzles
 batch = PuzzleBatch(
     blocks_range=(6, 10),
     colors_range=(2, 4),
     colors_blocks=['blue', 'red', 'gray'],
     nb_moves=5,
     grid_size=(12, 6),
+    nb_attempts=3,
     stack_probability=0.75
 )
 

@@ -18,32 +18,52 @@ logger = logging.getLogger(__name__)
 
 class PuzzleBatchGenerator:
     """
-    Generates and manages batches of puzzles with varying parameters.
+    Generate and manage batches of puzzles by iterating over ranges of parameters.
 
-    This class allows you to:
-      - Generate multiple puzzles for different combinations of block counts and color counts.
-      - Automatically filter out unsolvable puzzles (within the specified number of moves).
-      - Collect statistics on solvable/unsolvable puzzles.
-      - Save results as PDF (visuals) and CSV (data).
-      - Display summary charts (bar and pie charts) of the batch.
+    This class systematically generates puzzles for each integer value within the given
+    ranges of block counts and color counts. For each combination, it attempts to generate
+    puzzles solvable within the specified move limit.
+
+    It provides functionality to:
+      - Filter out puzzles unsolvable within the move constraints.
+      - Collect statistics about solvable and unsolvable puzzles across the batch.
+      - Export puzzles visually as PDFs and metadata as CSV files.
+      - Display summary charts (bar and pie) to analyze batch characteristics.
 
     Args:
-        blocks_range (tuple): (min, max) number of blocks per puzzle.
-        colors_range (tuple): (min, max) number of colors per puzzle.
-        colors_blocks (list): List of possible colors.
-        nb_moves (int): Maximum number of moves allowed to solve a puzzle.
-        batch_grid_size (tuple): Grid size for each puzzle (rows, columns).
-        batch_stack_probability (float): Probability to stack blocks during generation.
+
+        blocks_range (tuple[int, int]): Inclusive range of block counts to iterate through (min_blocks, max_blocks).
+
+        colors_range (tuple[int, int]): Inclusive range of color counts to iterate through (min_colors, max_colors).
+
+        colors_blocks (list[str]): List of available colors for blocks.
+
+        nb_moves (int): Maximum number of moves allowed for the optimal solution.
+
+        batch_grid_size (tuple[int, int]): Grid size for each puzzle as (rows, columns).
+
+        batch_stack_probability (float): Probability to stack blocks vertically during puzzle generation.
+
+        blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.
+
 
     Attributes:
-        puzzle_batch (dict): Stores generated puzzles, grouped by number of moves to solve.
-        nb_solvables (int): Number of solvable puzzles generated.
-        nb_unsolvables (int): Number of unsolvable puzzles generated.
-        stats (dict): Statistics on the batch (number of puzzles per move count).
-        csv_data (dict): Data for CSV export.
+
+        puzzle_batch (dict[int, list]): Dictionary mapping move counts to lists of generated puzzles.
+
+        nb_solvables (int): Number of puzzles solvable within the move limit.
+
+        nb_unsolvables (int): Number of puzzles not solvable within the move limit.
+
+        stats (dict[str, int]):  
+            Counts of puzzles solvable in 1 up to `nb_moves` moves.  
+            Keys are of the form 'solvable_in_X_moves' mapping to counts.  
+            Example: {'solvable_in_1_moves': 3, 'solvable_in_2_moves': 4, ...}
+            
+        csv_data (dict): Data formatted for CSV export.
     """
 
-    def __init__(self, blocks_range, colors_range, colors_blocks, nb_moves, batch_grid_size, batch_stack_probability):
+    def __init__(self, blocks_range, colors_range, colors_blocks, nb_moves, batch_grid_size, nb_attempts=5, batch_stack_probability=0.75, blocks_gap=1):
         self.blocks_range = blocks_range
         self.colors_range = colors_range
         self.colors = colors_blocks
@@ -54,19 +74,22 @@ class PuzzleBatchGenerator:
         self.stats = {}
         self.csv_data = {}
         self.batch_grid_size = batch_grid_size
+        self.nb_attempts = nb_attempts
         self.batch_stack_probability = batch_stack_probability
+        self.blocks_gap = blocks_gap
 
     def generate_puzzles(self):
         """
-        Generate a batch of puzzles for all combinations of block and color counts.
+        Generate puzzles for all combinations of block and color counts within the specified ranges.
 
         For each combination:
-          - Tries up to 5 times to generate a solvable puzzle.
-          - Stores puzzles by the number of moves required to solve.
-          - Updates statistics and CSV data.
+        - Attempts up to `nb_attempts` times to create a puzzle solvable within `nb_moves`.
+        - Stores solvable puzzles grouped by the number of moves required to solve.
+        - Updates statistics and prepares data for CSV export.
 
         Returns:
-            dict: The generated batch of puzzles, grouped by moves required to solve.
+            dict: Dictionary of generated puzzles grouped by move counts, 
+                keys formatted as 'solvable_in_X_moves'.
         """
 
         print_framed([
@@ -88,9 +111,8 @@ class PuzzleBatchGenerator:
             "moves": []
         }
         stack_probability = self.batch_stack_probability
-        blocks_gap = 1
+        blocks_gap = self.blocks_gap
 
-        # Calculate total number of combinations for the progress bar
         total_combinations = 0
         for nb_colors in range(self.colors_range[0], self.colors_range[1] + 1):
             iterated_colors = self.colors[:nb_colors]
@@ -116,13 +138,13 @@ class PuzzleBatchGenerator:
                             grid_size = self.batch_grid_size
                         is_solvable = False
                         logger.info(f"Generating puzzle for {nb_blocks} blocks, colors: {iterated_colors}, grid size: {grid_size}")
-                        nb_attempts = 0
-                        while not(is_solvable) and nb_attempts < 5:
+                        nb_attempts_ = 0
+                        while not(is_solvable) and nb_attempts_ < self.nb_attempts:
                             grid = GridInitializer(grid_size, nb_blocks, iterated_colors, self.nb_moves, stack_probability, blocks_gap)
                             grid.initialize_grid()
                             solver = BFSSolver(grid, PuzzleLogic())
                             is_solvable, solution = solver.perform_all_blocks_moves(display_progress=False)
-                            nb_attempts = nb_attempts + 1
+                            nb_attempts_ = nb_attempts_ + 1
                         if is_solvable:
                             round = solution["rounds_number_history"][-2]
                             key = 'solvable_in_' + str(round) + '_moves'
@@ -191,9 +213,9 @@ class PuzzleBatchGenerator:
 
     def compute_stats(self):
         """
-        Compute statistics for the generated batch.
+        Compute and update statistics for the generated puzzle batch.
 
-        Populates the `stats` attribute with the number of puzzles solvable in each move count.
+        Populates the `stats` attribute with counts of puzzles solvable in each number of moves.
         """
         for move in sorted(self.puzzle_batch.keys()):
           self.stats[move] = len(self.puzzle_batch[move])
@@ -201,10 +223,10 @@ class PuzzleBatchGenerator:
 
     def set_batch(self, batch):
         """
-        Set the current batch of puzzles.
+        Set the current batch of puzzles manually.
 
         Args:
-            batch (dict): Batch of puzzles to set.
+            batch (dict): Dictionary of puzzles grouped by move count.
         """
         self.puzzle_batch = batch
 
@@ -213,24 +235,42 @@ class PuzzleBatchGenerator:
         Display bar and pie charts summarizing the batch statistics.
 
         Args:
-            show (bool): If True, displays the charts.
+            show (bool): If True, display the charts.
         """
         labels = list(self.stats.keys()) + ['unsolvable']
         sizes = list(self.stats.values()) + [self.nb_unsolvables]
 
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
 
-        ax1.bar(labels, sizes)
-        ax1.set_title('Number of Puzzles Generated (Bar Chart)')
+        x = range(len(labels))
+        ax1.bar(x, sizes)
+        ax1.set_title('Number of Puzzles Generated (Bar Chart)', pad=20)
+        ax1.set_xticks(x)
+        ax1.set_xticklabels(labels, rotation=45, ha='right')
+        ax1.tick_params(axis='x', labelsize=8)
 
-        ax2.pie(sizes, labels=labels, autopct=lambda p: '{:.2f}%({:.0f})'.format(p,(p/100)*sum(sizes)))
-        ax2.set_title('Number of Puzzles Generated (Pie Chart)')
+        wedges, texts, autotexts = ax2.pie(
+            sizes,
+            labels=None,
+            autopct=lambda p: '{:.2f}%({:.0f})'.format(p, (p/100)*sum(sizes)),
+            startangle=90,
+            wedgeprops=dict(edgecolor='w')
+        )
+        ax2.set_title('Number of Puzzles Generated (Pie Chart)', pad=20)
+        ax2.axis('equal')
+
+        for i, autotext in enumerate(autotexts):
+            if autotext.get_text().startswith("0.00%"):
+                x, y = autotext.get_position()
+                autotext.set_position((x * 1.3, y * 1.3))
+
+        ax2.legend(wedges, labels, title="Legend", loc="center left", bbox_to_anchor=(1, 0.5), fontsize=9)
 
         fig.tight_layout()
 
         if show:
-          print("🖼️  Close the figure window to continue...")
-          plt.show()
+            print("🖼️  Close the figure window to continue...")
+            plt.show()
 
     def save_results_as_csv(self, filename=None):
         """
@@ -239,10 +279,11 @@ class PuzzleBatchGenerator:
         The CSV contains, for each puzzle:
           - Number of blocks
           - Colors used
-          - Initial positions
+          - Initial block positions
           - Number of moves to solve
 
-        The file is saved with a timestamp in the filename.
+        Args:
+            filename (str, optional): CSV filename. Defaults to a timestamped filename.
         """
         if filename is None:
             filename = str(datetime.datetime.now()) + '_puzzle_generation.csv'
@@ -257,13 +298,15 @@ class PuzzleBatchGenerator:
 
     def save_file(self, filename):
         """
-        Save or offer a file for download depending on the execution environment:
-        - Google Colab: downloads in browser
-        - Jupyter Notebook/Lab: shows a download link
-        - Script or other env: saves in 'outputs' folder
+        Save or provide a download link for the file depending on the execution environment.
+
+        Supports:
+        - Google Colab: triggers browser download.
+        - Jupyter Notebook/Lab: shows a clickable download link.
+        - Script or other environments: saves file in 'outputs' directory.
 
         Args:
-            filename (str): Name of the file to save
+            filename (str): Name of the file to save or offer for download.
         """
         try:
             ipython_shell = get_ipython().__class__.__name__
@@ -287,8 +330,3 @@ class PuzzleBatchGenerator:
             destination = outputs_dir / Path(filename).name
             shutil.move(filename, destination)
             print(f"File saved locally at: {destination}")
-            #else:
-            #    current_dir = os.getcwd()
-            #    new_file_path = os.path.join(current_dir, filename)
-            #    os.rename(filename, new_file_path)
-            #    print(f"File saved locally at: {new_file_path}")

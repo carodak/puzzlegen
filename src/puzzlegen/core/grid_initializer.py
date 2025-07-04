@@ -8,7 +8,7 @@ from matplotlib import colors
 from .utils import assign_blocks_per_color, sort_blocks_by_rows, print_framed
 from .block import Block
 
-mpl.rcParams['figure.max_open_warning'] = 50  # Increase the maximum number of warnings
+mpl.rcParams['figure.max_open_warning'] = 50
 
 class GridInitializer:
     """GridInitializer Class: This class is responsible for handling the setup of the game board, including generating the initial configuration of blocks.
@@ -18,12 +18,18 @@ class GridInitializer:
         Initialize the GridInitializer.
 
         Args:
+
             grid_size (tuple): Size of the grid as (rows, columns).
+
             nb_blocks (int): Number of blocks to place.
+
             colors (list): List of block colors.
-            min_nb_moves (int): Minimum number of moves to solve.
+
+            min_nb_moves (int): Maximum number of moves allowed for the optimal solution.
+
             stack_probability (float): Probability of stacking blocks.
-            blocks_gap (int): Minimum gap between blocks in the same row.
+
+            blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.
         """
         self.grid_size = grid_size
         self.nb_blocks = nb_blocks
@@ -38,7 +44,9 @@ class GridInitializer:
         Check if a position is within the grid bounds.
 
         Args:
+
             row (int): Row index.
+
             col (int): Column index.
 
         Returns:
@@ -53,7 +61,9 @@ class GridInitializer:
         Check if a block is present at the given position.
 
         Args:
+
             row (int): Row index.
+
             col (int): Column index.
 
         Returns:
@@ -73,8 +83,11 @@ class GridInitializer:
         Check if a block of the same color is present at the given position.
 
         Args:
+
             row (int): Row index.
+
             col (int): Column index.
+
             color (str): Color to check.
 
         Returns:
@@ -89,8 +102,11 @@ class GridInitializer:
         Check if placing a block at the given position is valid according to the rules (no matches are allowed during initial setup).
 
         Args:
+
             row (int): Row index.
+
             col (int): Column index.
+
             color (str): Color of the block.
 
         Returns:
@@ -240,11 +256,14 @@ class GridInitializer:
         row 0 appears at the bottom, consistent with a bottom-up grid orientation.
 
         Args:
+
             set_blocks (dict): Dictionary mapping (row, col) positions to Block objects. Each block
                                 contains a `color` attribute used for rendering.
+
             grid_size (tuple): A (rows, columns) tuple indicating the dimensions of the grid.
 
         Returns:
+        
             tuple: (fig, ax, grid)
                 - fig (matplotlib.figure.Figure): The matplotlib figure object.
                 - ax (matplotlib.axes.Axes): The matplotlib axis with rendered grid.

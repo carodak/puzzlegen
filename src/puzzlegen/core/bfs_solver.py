@@ -22,7 +22,9 @@ class BFSSolver:
         Initialize the BFSSolver with a grid and puzzle logic instance.
 
         Args:
+
             grid_initializer (GridInitializer): Handles initial puzzle setup and parameters.
+
             puzzle_logic (PuzzleLogic): Provides core puzzle mechanics (moves, gravity, match detection).
         """
         self.grid_initializer = grid_initializer
@@ -41,9 +43,11 @@ class BFSSolver:
         The exploration stops when either a solution is found or the search depth exceeds the allowed limit.
 
         Args:
+
             display_progress (bool): Whether to show a progress bar during the search.
 
         Returns:
+
             tuple:
                 - is_solvable (bool): True if a valid solution is found within the move limit, False otherwise.
                 - solution (dict): A dictionary containing the move history and block states leading to the solution,
@@ -133,14 +137,21 @@ class BFSSolver:
         If a terminal game state is reached (e.g., state == 3), a solution is extracted and returned immediately.
 
         Args:
+
             set_blocks (dict): Dictionary of current block positions and Block objects.
+
             current_item (dict): Current BFS node containing history of previous states and moves.
+
             current_round (int): The current depth (round) in the BFS search tree.
+
             grid_size (tuple): Tuple indicating grid dimensions (rows, columns).
+
             colors (list): List of allowed block colors.
+
             queue (deque): The BFS queue, to which new valid states will be appended.
 
         Returns:
+
             tuple:
                 - is_solvable (bool): True if a solution is found in this branch, False otherwise.
                 - solution (dict): Dictionary containing the history of moves and states leading to the solution,
@@ -176,7 +187,9 @@ class BFSSolver:
         prints the solution path, and returns it.
 
         Args:
+
             solved_puzzle_dict (dict): Contains the steps that led to the solution.
+
             current_round (int): Number of moves it took to solve the puzzle.
 
         Returns:
@@ -198,10 +211,14 @@ class BFSSolver:
         The initial and final grid states are labeled clearly.
 
         Args:
+
             solved_puzzle_dict (dict): Dictionary containing the history of grid states,
                                     moves, and block positions from the solver.
+
             grid_size (tuple): Size of the puzzle grid (rows, columns).
+
             show (bool): If True, the plot is displayed using matplotlib.
+
             ax (matplotlib.axes.Axes, optional): Optional axis to plot on (useful for embedding).
 
         Returns:
@@ -246,8 +263,8 @@ class BFSSolver:
                 title = f"..::SOLUTION::..: Solvable in {rounds_number_history[-2]} moves\nInitial State"
             if i != num_subplots - 1:
                 title += f"\n(Move {round})\nPerform: {move_type} at position: {position}"
-                ax[row_idx, col_idx], grid = BFSSolver.highlight_moved_block(set_blocks, position, ax[row_idx, col_idx], grid, grid_size)
-                ax[row_idx, col_idx], grid = BFSSolver.draw_arrow(set_blocks, position, move_type, ax[row_idx, col_idx], grid, grid_size)
+                ax[row_idx, col_idx], grid = BFSSolver.highlight_moved_block(position, ax[row_idx, col_idx], grid, grid_size)
+                ax[row_idx, col_idx], grid = BFSSolver.draw_arrow(position, move_type, ax[row_idx, col_idx], grid, grid_size)
             else:
                 title = "Final State"
 
@@ -259,7 +276,6 @@ class BFSSolver:
             ax[row_idx, col_idx].set_xlim(-0.5, grid_size[1] + 0.5)
             ax[row_idx, col_idx].set_ylim(-0.5, grid_size[0] + 0.5)
 
-        # Hide any unused subplots (in last row if num_subplots < rows*cols)
         for idx in range(num_subplots, rows * cols):
             r = idx // cols
             c = idx % cols
@@ -272,15 +288,18 @@ class BFSSolver:
             plt.show()
 
     @staticmethod
-    def highlight_moved_block(set_blocks, position, ax, grid, grid_size):
+    def highlight_moved_block(position, ax, grid, grid_size):
         """
         Visually highlight the block that was moved by drawing a lime-colored border around it.
 
         Args:
-            set_blocks (dict): Dictionary of current block positions and their colors.
+
             position (tuple): (row, col) coordinates of the moved block.
+
             ax (matplotlib.axes.Axes): The matplotlib axis on which to draw.
+
             grid (list): 2D list representing the grid colors.
+
             grid_size (tuple): Size of the grid (rows, columns).
 
         Returns:
@@ -294,16 +313,20 @@ class BFSSolver:
         return ax, grid
 
     @staticmethod
-    def draw_arrow(set_blocks, position, move_type, ax, grid, grid_size):
+    def draw_arrow(position, move_type, ax, grid, grid_size):
         """
         Draw an arrow on the plot to indicate the direction of a block’s move.
 
         Args:
-            set_blocks (dict): Dictionary of current block positions and their colors.
+
             position (tuple): (row, col) coordinates of the moved block.
+
             move_type (str): Type of move performed (e.g., 'move_left', 'exchange_right').
+
             ax (matplotlib.axes.Axes): The matplotlib axis on which to draw the arrow.
+
             grid (list): 2D list representing the grid colors.
+
             grid_size (tuple): Size of the grid (rows, columns).
 
         Returns:
@@ -322,10 +345,15 @@ class BFSSolver:
         Create a FancyArrowPatch for move visualization.
 
         Args:
+
             arrow_pos_col (int): Column of the arrow start.
+
             arrow_pos_row (int): Row of the arrow start.
+
             move_type (str): Type of move.
+
             linecol (str): Color of the arrow.
+            
             grid_size (tuple): Size of the grid.
 
         Returns:

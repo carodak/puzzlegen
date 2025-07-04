@@ -108,93 +108,137 @@
 
                         <label class="view-source-button" for="mod-frontend-view-source"><span>View Source</span></label>
 
-                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos"> 1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">puzzlegen.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridInitializer</span><span class="p">,</span> <span class="n">PuzzleLogic</span><span class="p">,</span> <span class="n">BFSSolver</span><span class="p">,</span> <span class="n">PuzzleBatchGenerator</span>
-</span><span id="L-2"><a href="#L-2"><span class="linenos"> 2</span></a>
-</span><span id="L-3"><a href="#L-3"><span class="linenos"> 3</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SinglePuzzle</span><span class="p">:</span>
-</span><span id="L-4"><a href="#L-4"><span class="linenos"> 4</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-</span><span id="L-5"><a href="#L-5"><span class="linenos"> 5</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-6"><a href="#L-6"><span class="linenos"> 6</span></a><span class="sd">        Initialize the SinglePuzzle frontend.</span>
-</span><span id="L-7"><a href="#L-7"><span class="linenos"> 7</span></a>
-</span><span id="L-8"><a href="#L-8"><span class="linenos"> 8</span></a><span class="sd">        Args:</span>
-</span><span id="L-9"><a href="#L-9"><span class="linenos"> 9</span></a><span class="sd">            nb_blocks (int): Number of blocks.</span>
-</span><span id="L-10"><a href="#L-10"><span class="linenos">10</span></a><span class="sd">            colors (list): List of colors.</span>
-</span><span id="L-11"><a href="#L-11"><span class="linenos">11</span></a><span class="sd">            nb_moves (int): Number of moves to solve.</span>
-</span><span id="L-12"><a href="#L-12"><span class="linenos">12</span></a><span class="sd">            grid_size (tuple): (rows, cols) of the grid.</span>
-</span><span id="L-13"><a href="#L-13"><span class="linenos">13</span></a><span class="sd">            stack_probability (float): Probability to stack blocks.</span>
-</span><span id="L-14"><a href="#L-14"><span class="linenos">14</span></a><span class="sd">            blocks_gap (int): Minimum gap between blocks in a row.</span>
-</span><span id="L-15"><a href="#L-15"><span class="linenos">15</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-16"><a href="#L-16"><span class="linenos">16</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">GridInitializer</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">stack_probability</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="p">)</span>
-</span><span id="L-17"><a href="#L-17"><span class="linenos">17</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-18"><a href="#L-18"><span class="linenos">18</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="L-19"><a href="#L-19"><span class="linenos">19</span></a>
-</span><span id="L-20"><a href="#L-20"><span class="linenos">20</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-21"><a href="#L-21"><span class="linenos">21</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the puzzle grid.&quot;&quot;&quot;</span>
-</span><span id="L-22"><a href="#L-22"><span class="linenos">22</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">initialize_grid</span><span class="p">()</span>
-</span><span id="L-23"><a href="#L-23"><span class="linenos">23</span></a>
-</span><span id="L-24"><a href="#L-24"><span class="linenos">24</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-25"><a href="#L-25"><span class="linenos">25</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the puzzle grid.&quot;&quot;&quot;</span>
-</span><span id="L-26"><a href="#L-26"><span class="linenos">26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">print_initial_grid</span><span class="p">()</span>
-</span><span id="L-27"><a href="#L-27"><span class="linenos">27</span></a>
-</span><span id="L-28"><a href="#L-28"><span class="linenos">28</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-29"><a href="#L-29"><span class="linenos">29</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Solve the puzzle and store the solution.&quot;&quot;&quot;</span>
-</span><span id="L-30"><a href="#L-30"><span class="linenos">30</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">BFSSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">PuzzleLogic</span><span class="p">())</span>
-</span><span id="L-31"><a href="#L-31"><span class="linenos">31</span></a>        <span class="n">is_solvable</span><span class="p">,</span> <span class="n">solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">perform_all_blocks_moves</span><span class="p">()</span>
-</span><span id="L-32"><a href="#L-32"><span class="linenos">32</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="n">solution</span> <span class="k">if</span> <span class="n">is_solvable</span> <span class="k">else</span> <span class="kc">None</span>
-</span><span id="L-33"><a href="#L-33"><span class="linenos">33</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span>
-</span><span id="L-34"><a href="#L-34"><span class="linenos">34</span></a>    
-</span><span id="L-35"><a href="#L-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-36"><a href="#L-36"><span class="linenos">36</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the solution if available.&quot;&quot;&quot;</span>
-</span><span id="L-37"><a href="#L-37"><span class="linenos">37</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">:</span>
-</span><span id="L-38"><a href="#L-38"><span class="linenos">38</span></a>            <span class="n">BFSSolver</span><span class="o">.</span><span class="n">print_history</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-39"><a href="#L-39"><span class="linenos">39</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-40"><a href="#L-40"><span class="linenos">40</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found.&quot;</span><span class="p">)</span>
-</span><span id="L-41"><a href="#L-41"><span class="linenos">41</span></a>
-</span><span id="L-42"><a href="#L-42"><span class="linenos">42</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PuzzleBatch</span><span class="p">:</span>
-</span><span id="L-43"><a href="#L-43"><span class="linenos">43</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">):</span>
-</span><span id="L-44"><a href="#L-44"><span class="linenos">44</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="L-45"><a href="#L-45"><span class="linenos">45</span></a><span class="sd">        Frontend interface to generate a batch of puzzles.</span>
-</span><span id="L-46"><a href="#L-46"><span class="linenos">46</span></a>
-</span><span id="L-47"><a href="#L-47"><span class="linenos">47</span></a><span class="sd">        Args:</span>
-</span><span id="L-48"><a href="#L-48"><span class="linenos">48</span></a><span class="sd">            blocks_range (tuple): (min, max) number of blocks.</span>
-</span><span id="L-49"><a href="#L-49"><span class="linenos">49</span></a><span class="sd">            colors_range (tuple): (min, max) number of colors.</span>
-</span><span id="L-50"><a href="#L-50"><span class="linenos">50</span></a><span class="sd">            colors_blocks (list): List of possible colors.</span>
-</span><span id="L-51"><a href="#L-51"><span class="linenos">51</span></a><span class="sd">            nb_moves (int): Number of moves to solve.</span>
-</span><span id="L-52"><a href="#L-52"><span class="linenos">52</span></a><span class="sd">            grid_size (tuple): Grid size (rows, columns).</span>
-</span><span id="L-53"><a href="#L-53"><span class="linenos">53</span></a><span class="sd">            stack_probability (float): Probability to stack blocks.</span>
-</span><span id="L-54"><a href="#L-54"><span class="linenos">54</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="L-55"><a href="#L-55"><span class="linenos">55</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">PuzzleBatchGenerator</span><span class="p">(</span>
-</span><span id="L-56"><a href="#L-56"><span class="linenos">56</span></a>            <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span>
-</span><span id="L-57"><a href="#L-57"><span class="linenos">57</span></a>        <span class="p">)</span>
-</span><span id="L-58"><a href="#L-58"><span class="linenos">58</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="L-59"><a href="#L-59"><span class="linenos">59</span></a>
-</span><span id="L-60"><a href="#L-60"><span class="linenos">60</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-61"><a href="#L-61"><span class="linenos">61</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the batch of puzzles.&quot;&quot;&quot;</span>
-</span><span id="L-62"><a href="#L-62"><span class="linenos">62</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">generate_puzzles</span><span class="p">()</span>
-</span><span id="L-63"><a href="#L-63"><span class="linenos">63</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">compute_stats</span><span class="p">()</span>
-</span><span id="L-64"><a href="#L-64"><span class="linenos">64</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="L-65"><a href="#L-65"><span class="linenos">65</span></a>
-</span><span id="L-66"><a href="#L-66"><span class="linenos">66</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="L-67"><a href="#L-67"><span class="linenos">67</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display batch statistics (bar chart, pie chart).&quot;&quot;&quot;</span>
-</span><span id="L-68"><a href="#L-68"><span class="linenos">68</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
-</span><span id="L-69"><a href="#L-69"><span class="linenos">69</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_charts</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="L-70"><a href="#L-70"><span class="linenos">70</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-71"><a href="#L-71"><span class="linenos">71</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
-</span><span id="L-72"><a href="#L-72"><span class="linenos">72</span></a>
-</span><span id="L-73"><a href="#L-73"><span class="linenos">73</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-</span><span id="L-74"><a href="#L-74"><span class="linenos">74</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Save all batch grids as a PDF file.&quot;&quot;&quot;</span>
-</span><span id="L-75"><a href="#L-75"><span class="linenos">75</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
-</span><span id="L-76"><a href="#L-76"><span class="linenos">76</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_and_save_batch</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="L-77"><a href="#L-77"><span class="linenos">77</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PDF saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="L-78"><a href="#L-78"><span class="linenos">78</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-79"><a href="#L-79"><span class="linenos">79</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
-</span><span id="L-80"><a href="#L-80"><span class="linenos">80</span></a>
-</span><span id="L-81"><a href="#L-81"><span class="linenos">81</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-</span><span id="L-82"><a href="#L-82"><span class="linenos">82</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Save batch data as a CSV file.&quot;&quot;&quot;</span>
-</span><span id="L-83"><a href="#L-83"><span class="linenos">83</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
-</span><span id="L-84"><a href="#L-84"><span class="linenos">84</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">save_results_as_csv</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="L-85"><a href="#L-85"><span class="linenos">85</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CSV saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="L-86"><a href="#L-86"><span class="linenos">86</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="L-87"><a href="#L-87"><span class="linenos">87</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
+                        <div class="pdoc-code codehilite"><pre><span></span><span id="L-1"><a href="#L-1"><span class="linenos">  1</span></a><span class="kn">from</span><span class="w"> </span><span class="nn">puzzlegen.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">GridInitializer</span><span class="p">,</span> <span class="n">PuzzleLogic</span><span class="p">,</span> <span class="n">BFSSolver</span><span class="p">,</span> <span class="n">PuzzleBatchGenerator</span>
+</span><span id="L-2"><a href="#L-2"><span class="linenos">  2</span></a>
+</span><span id="L-3"><a href="#L-3"><span class="linenos">  3</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SinglePuzzle</span><span class="p">:</span>
+</span><span id="L-4"><a href="#L-4"><span class="linenos">  4</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-5"><a href="#L-5"><span class="linenos">  5</span></a><span class="sd">    User-facing interface for generating and solving a single Match-3 puzzle instance.</span>
+</span><span id="L-6"><a href="#L-6"><span class="linenos">  6</span></a><span class="sd">    Wraps the core logic to provide a simplified API.</span>
+</span><span id="L-7"><a href="#L-7"><span class="linenos">  7</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-8"><a href="#L-8"><span class="linenos">  8</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="L-9"><a href="#L-9"><span class="linenos">  9</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-10"><a href="#L-10"><span class="linenos"> 10</span></a><span class="sd">        Initialize the SinglePuzzle frontend.</span>
+</span><span id="L-11"><a href="#L-11"><span class="linenos"> 11</span></a>
+</span><span id="L-12"><a href="#L-12"><span class="linenos"> 12</span></a><span class="sd">        Args:</span>
+</span><span id="L-13"><a href="#L-13"><span class="linenos"> 13</span></a>
+</span><span id="L-14"><a href="#L-14"><span class="linenos"> 14</span></a><span class="sd">            nb_blocks (int): Total number of blocks to place on the grid.</span>
+</span><span id="L-15"><a href="#L-15"><span class="linenos"> 15</span></a>
+</span><span id="L-16"><a href="#L-16"><span class="linenos"> 16</span></a><span class="sd">            colors (list of str): List of colors to use for the blocks.</span>
+</span><span id="L-17"><a href="#L-17"><span class="linenos"> 17</span></a>
+</span><span id="L-18"><a href="#L-18"><span class="linenos"> 18</span></a><span class="sd">            nb_moves (int): Upper bound on the number of moves in the optimal solution. The generator ensures the puzzle can be solved in at most this number of moves.</span>
+</span><span id="L-19"><a href="#L-19"><span class="linenos"> 19</span></a>
+</span><span id="L-20"><a href="#L-20"><span class="linenos"> 20</span></a><span class="sd">            grid_size (tuple of int): Dimensions of the grid as (rows, columns).</span>
+</span><span id="L-21"><a href="#L-21"><span class="linenos"> 21</span></a>
+</span><span id="L-22"><a href="#L-22"><span class="linenos"> 22</span></a><span class="sd">            stack_probability (float, optional): Probability of stacking blocks vertically. Default is 0.75.</span>
+</span><span id="L-23"><a href="#L-23"><span class="linenos"> 23</span></a><span class="sd">            </span>
+</span><span id="L-24"><a href="#L-24"><span class="linenos"> 24</span></a><span class="sd">            blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.</span>
+</span><span id="L-25"><a href="#L-25"><span class="linenos"> 25</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-26"><a href="#L-26"><span class="linenos"> 26</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">GridInitializer</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">stack_probability</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="p">)</span>
+</span><span id="L-27"><a href="#L-27"><span class="linenos"> 27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-28"><a href="#L-28"><span class="linenos"> 28</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="L-29"><a href="#L-29"><span class="linenos"> 29</span></a>
+</span><span id="L-30"><a href="#L-30"><span class="linenos"> 30</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-31"><a href="#L-31"><span class="linenos"> 31</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the puzzle grid with the specified configuration.&quot;&quot;&quot;</span>
+</span><span id="L-32"><a href="#L-32"><span class="linenos"> 32</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">initialize_grid</span><span class="p">()</span>
+</span><span id="L-33"><a href="#L-33"><span class="linenos"> 33</span></a>
+</span><span id="L-34"><a href="#L-34"><span class="linenos"> 34</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-35"><a href="#L-35"><span class="linenos"> 35</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the initial state of the puzzle grid.&quot;&quot;&quot;</span>
+</span><span id="L-36"><a href="#L-36"><span class="linenos"> 36</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">print_initial_grid</span><span class="p">()</span>
+</span><span id="L-37"><a href="#L-37"><span class="linenos"> 37</span></a>
+</span><span id="L-38"><a href="#L-38"><span class="linenos"> 38</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-39"><a href="#L-39"><span class="linenos"> 39</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-40"><a href="#L-40"><span class="linenos"> 40</span></a><span class="sd">        Attempt to solve the puzzle using BFS.</span>
+</span><span id="L-41"><a href="#L-41"><span class="linenos"> 41</span></a>
+</span><span id="L-42"><a href="#L-42"><span class="linenos"> 42</span></a><span class="sd">        Returns:</span>
+</span><span id="L-43"><a href="#L-43"><span class="linenos"> 43</span></a><span class="sd">            list or None: A list of moves if the puzzle is solvable; otherwise, None.</span>
+</span><span id="L-44"><a href="#L-44"><span class="linenos"> 44</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-45"><a href="#L-45"><span class="linenos"> 45</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">BFSSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">PuzzleLogic</span><span class="p">())</span>
+</span><span id="L-46"><a href="#L-46"><span class="linenos"> 46</span></a>        <span class="n">is_solvable</span><span class="p">,</span> <span class="n">solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">perform_all_blocks_moves</span><span class="p">()</span>
+</span><span id="L-47"><a href="#L-47"><span class="linenos"> 47</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="n">solution</span> <span class="k">if</span> <span class="n">is_solvable</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="L-48"><a href="#L-48"><span class="linenos"> 48</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span>
+</span><span id="L-49"><a href="#L-49"><span class="linenos"> 49</span></a>    
+</span><span id="L-50"><a href="#L-50"><span class="linenos"> 50</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-51"><a href="#L-51"><span class="linenos"> 51</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the solution path if one was found.&quot;&quot;&quot;</span>
+</span><span id="L-52"><a href="#L-52"><span class="linenos"> 52</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">:</span>
+</span><span id="L-53"><a href="#L-53"><span class="linenos"> 53</span></a>            <span class="n">BFSSolver</span><span class="o">.</span><span class="n">print_history</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-54"><a href="#L-54"><span class="linenos"> 54</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-55"><a href="#L-55"><span class="linenos"> 55</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found.&quot;</span><span class="p">)</span>
+</span><span id="L-56"><a href="#L-56"><span class="linenos"> 56</span></a>
+</span><span id="L-57"><a href="#L-57"><span class="linenos"> 57</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PuzzleBatch</span><span class="p">:</span>
+</span><span id="L-58"><a href="#L-58"><span class="linenos"> 58</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-59"><a href="#L-59"><span class="linenos"> 59</span></a><span class="sd">    Frontend interface for generating and exporting multiple puzzles with varying parameters.</span>
+</span><span id="L-60"><a href="#L-60"><span class="linenos"> 60</span></a><span class="sd">    Useful for statistical analysis or dataset creation.</span>
+</span><span id="L-61"><a href="#L-61"><span class="linenos"> 61</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="L-62"><a href="#L-62"><span class="linenos"> 62</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_attempts</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="L-63"><a href="#L-63"><span class="linenos"> 63</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-64"><a href="#L-64"><span class="linenos"> 64</span></a><span class="sd">        Initialize the batch puzzle generator.</span>
+</span><span id="L-65"><a href="#L-65"><span class="linenos"> 65</span></a>
+</span><span id="L-66"><a href="#L-66"><span class="linenos"> 66</span></a><span class="sd">        Args:</span>
+</span><span id="L-67"><a href="#L-67"><span class="linenos"> 67</span></a>
+</span><span id="L-68"><a href="#L-68"><span class="linenos"> 68</span></a><span class="sd">            blocks_range (tuple of int): Range of block counts to iterate over as (min_blocks, max_blocks).</span>
+</span><span id="L-69"><a href="#L-69"><span class="linenos"> 69</span></a><span class="sd">                For each block count in this range, puzzles will be generated.</span>
+</span><span id="L-70"><a href="#L-70"><span class="linenos"> 70</span></a><span class="sd">            </span>
+</span><span id="L-71"><a href="#L-71"><span class="linenos"> 71</span></a><span class="sd">            colors_range (tuple of int): Range of color counts to iterate over as (min_colors, max_colors).</span>
+</span><span id="L-72"><a href="#L-72"><span class="linenos"> 72</span></a><span class="sd">                For each color count in this range, puzzles will be generated.</span>
+</span><span id="L-73"><a href="#L-73"><span class="linenos"> 73</span></a>
+</span><span id="L-74"><a href="#L-74"><span class="linenos"> 74</span></a><span class="sd">            colors_blocks (list of str): Pool of possible block colors to choose from.</span>
+</span><span id="L-75"><a href="#L-75"><span class="linenos"> 75</span></a>
+</span><span id="L-76"><a href="#L-76"><span class="linenos"> 76</span></a><span class="sd">            nb_moves (int): Maximum number of moves allowed in the optimal solution.</span>
+</span><span id="L-77"><a href="#L-77"><span class="linenos"> 77</span></a><span class="sd">                The generator attempts to create puzzles solvable within this limit.</span>
+</span><span id="L-78"><a href="#L-78"><span class="linenos"> 78</span></a>
+</span><span id="L-79"><a href="#L-79"><span class="linenos"> 79</span></a><span class="sd">            grid_size (tuple of int): Dimensions of the puzzle grid as (rows, columns).</span>
+</span><span id="L-80"><a href="#L-80"><span class="linenos"> 80</span></a>
+</span><span id="L-81"><a href="#L-81"><span class="linenos"> 81</span></a><span class="sd">            nb_attempts (int, optional): Number of attempts to generate a solvable puzzle for each</span>
+</span><span id="L-82"><a href="#L-82"><span class="linenos"> 82</span></a><span class="sd">                combination of blocks and colors. If no valid puzzle is found after these attempts,</span>
+</span><span id="L-83"><a href="#L-83"><span class="linenos"> 83</span></a><span class="sd">                no puzzle is generated for that combination. Default is 5.</span>
+</span><span id="L-84"><a href="#L-84"><span class="linenos"> 84</span></a>
+</span><span id="L-85"><a href="#L-85"><span class="linenos"> 85</span></a><span class="sd">            stack_probability (float, optional): Probability to stack blocks vertically during generation.</span>
+</span><span id="L-86"><a href="#L-86"><span class="linenos"> 86</span></a><span class="sd">                Default is 0.75.</span>
+</span><span id="L-87"><a href="#L-87"><span class="linenos"> 87</span></a><span class="sd">            blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.</span>
+</span><span id="L-88"><a href="#L-88"><span class="linenos"> 88</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-89"><a href="#L-89"><span class="linenos"> 89</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">PuzzleBatchGenerator</span><span class="p">(</span>
+</span><span id="L-90"><a href="#L-90"><span class="linenos"> 90</span></a>            <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_attempts</span><span class="p">,</span> <span class="n">stack_probability</span><span class="p">,</span> <span class="n">blocks_gap</span>
+</span><span id="L-91"><a href="#L-91"><span class="linenos"> 91</span></a>        <span class="p">)</span>
+</span><span id="L-92"><a href="#L-92"><span class="linenos"> 92</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="L-93"><a href="#L-93"><span class="linenos"> 93</span></a>
+</span><span id="L-94"><a href="#L-94"><span class="linenos"> 94</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-95"><a href="#L-95"><span class="linenos"> 95</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a batch of puzzles based on the configured parameter ranges.&quot;&quot;&quot;</span>
+</span><span id="L-96"><a href="#L-96"><span class="linenos"> 96</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">generate_puzzles</span><span class="p">()</span>
+</span><span id="L-97"><a href="#L-97"><span class="linenos"> 97</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">compute_stats</span><span class="p">()</span>
+</span><span id="L-98"><a href="#L-98"><span class="linenos"> 98</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="L-99"><a href="#L-99"><span class="linenos"> 99</span></a>
+</span><span id="L-100"><a href="#L-100"><span class="linenos">100</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="L-101"><a href="#L-101"><span class="linenos">101</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display statistical charts for the generated batch (e.g., bar chart and pie chart).&quot;&quot;&quot;</span>
+</span><span id="L-102"><a href="#L-102"><span class="linenos">102</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
+</span><span id="L-103"><a href="#L-103"><span class="linenos">103</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_charts</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="L-104"><a href="#L-104"><span class="linenos">104</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-105"><a href="#L-105"><span class="linenos">105</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
+</span><span id="L-106"><a href="#L-106"><span class="linenos">106</span></a>
+</span><span id="L-107"><a href="#L-107"><span class="linenos">107</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+</span><span id="L-108"><a href="#L-108"><span class="linenos">108</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-109"><a href="#L-109"><span class="linenos">109</span></a><span class="sd">        Export all puzzle grids in the batch as a PDF.</span>
+</span><span id="L-110"><a href="#L-110"><span class="linenos">110</span></a>
+</span><span id="L-111"><a href="#L-111"><span class="linenos">111</span></a><span class="sd">        Args:</span>
+</span><span id="L-112"><a href="#L-112"><span class="linenos">112</span></a><span class="sd">            filename (str): Output filename for the PDF.</span>
+</span><span id="L-113"><a href="#L-113"><span class="linenos">113</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-114"><a href="#L-114"><span class="linenos">114</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
+</span><span id="L-115"><a href="#L-115"><span class="linenos">115</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_and_save_batch</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="L-116"><a href="#L-116"><span class="linenos">116</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PDF saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-117"><a href="#L-117"><span class="linenos">117</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-118"><a href="#L-118"><span class="linenos">118</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
+</span><span id="L-119"><a href="#L-119"><span class="linenos">119</span></a>
+</span><span id="L-120"><a href="#L-120"><span class="linenos">120</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+</span><span id="L-121"><a href="#L-121"><span class="linenos">121</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="L-122"><a href="#L-122"><span class="linenos">122</span></a><span class="sd">        Export puzzle metadata and configuration results as a CSV file.</span>
+</span><span id="L-123"><a href="#L-123"><span class="linenos">123</span></a>
+</span><span id="L-124"><a href="#L-124"><span class="linenos">124</span></a><span class="sd">        Args:</span>
+</span><span id="L-125"><a href="#L-125"><span class="linenos">125</span></a><span class="sd">            filename (str): Output filename for the CSV.</span>
+</span><span id="L-126"><a href="#L-126"><span class="linenos">126</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="L-127"><a href="#L-127"><span class="linenos">127</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
+</span><span id="L-128"><a href="#L-128"><span class="linenos">128</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">save_results_as_csv</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="L-129"><a href="#L-129"><span class="linenos">129</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CSV saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="L-130"><a href="#L-130"><span class="linenos">130</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="L-131"><a href="#L-131"><span class="linenos">131</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
@@ -211,47 +255,65 @@
     </div>
     <a class="headerlink" href="#SinglePuzzle"></a>
             <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle-4"><a href="#SinglePuzzle-4"><span class="linenos"> 4</span></a><span class="k">class</span><span class="w"> </span><span class="nc">SinglePuzzle</span><span class="p">:</span>
-</span><span id="SinglePuzzle-5"><a href="#SinglePuzzle-5"><span class="linenos"> 5</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-</span><span id="SinglePuzzle-6"><a href="#SinglePuzzle-6"><span class="linenos"> 6</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle-7"><a href="#SinglePuzzle-7"><span class="linenos"> 7</span></a><span class="sd">        Initialize the SinglePuzzle frontend.</span>
-</span><span id="SinglePuzzle-8"><a href="#SinglePuzzle-8"><span class="linenos"> 8</span></a>
-</span><span id="SinglePuzzle-9"><a href="#SinglePuzzle-9"><span class="linenos"> 9</span></a><span class="sd">        Args:</span>
-</span><span id="SinglePuzzle-10"><a href="#SinglePuzzle-10"><span class="linenos">10</span></a><span class="sd">            nb_blocks (int): Number of blocks.</span>
-</span><span id="SinglePuzzle-11"><a href="#SinglePuzzle-11"><span class="linenos">11</span></a><span class="sd">            colors (list): List of colors.</span>
-</span><span id="SinglePuzzle-12"><a href="#SinglePuzzle-12"><span class="linenos">12</span></a><span class="sd">            nb_moves (int): Number of moves to solve.</span>
-</span><span id="SinglePuzzle-13"><a href="#SinglePuzzle-13"><span class="linenos">13</span></a><span class="sd">            grid_size (tuple): (rows, cols) of the grid.</span>
-</span><span id="SinglePuzzle-14"><a href="#SinglePuzzle-14"><span class="linenos">14</span></a><span class="sd">            stack_probability (float): Probability to stack blocks.</span>
-</span><span id="SinglePuzzle-15"><a href="#SinglePuzzle-15"><span class="linenos">15</span></a><span class="sd">            blocks_gap (int): Minimum gap between blocks in a row.</span>
-</span><span id="SinglePuzzle-16"><a href="#SinglePuzzle-16"><span class="linenos">16</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle-17"><a href="#SinglePuzzle-17"><span class="linenos">17</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">GridInitializer</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">stack_probability</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="p">)</span>
-</span><span id="SinglePuzzle-18"><a href="#SinglePuzzle-18"><span class="linenos">18</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="SinglePuzzle-19"><a href="#SinglePuzzle-19"><span class="linenos">19</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SinglePuzzle-5"><a href="#SinglePuzzle-5"><span class="linenos"> 5</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle-6"><a href="#SinglePuzzle-6"><span class="linenos"> 6</span></a><span class="sd">    User-facing interface for generating and solving a single Match-3 puzzle instance.</span>
+</span><span id="SinglePuzzle-7"><a href="#SinglePuzzle-7"><span class="linenos"> 7</span></a><span class="sd">    Wraps the core logic to provide a simplified API.</span>
+</span><span id="SinglePuzzle-8"><a href="#SinglePuzzle-8"><span class="linenos"> 8</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle-9"><a href="#SinglePuzzle-9"><span class="linenos"> 9</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="SinglePuzzle-10"><a href="#SinglePuzzle-10"><span class="linenos">10</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle-11"><a href="#SinglePuzzle-11"><span class="linenos">11</span></a><span class="sd">        Initialize the SinglePuzzle frontend.</span>
+</span><span id="SinglePuzzle-12"><a href="#SinglePuzzle-12"><span class="linenos">12</span></a>
+</span><span id="SinglePuzzle-13"><a href="#SinglePuzzle-13"><span class="linenos">13</span></a><span class="sd">        Args:</span>
+</span><span id="SinglePuzzle-14"><a href="#SinglePuzzle-14"><span class="linenos">14</span></a>
+</span><span id="SinglePuzzle-15"><a href="#SinglePuzzle-15"><span class="linenos">15</span></a><span class="sd">            nb_blocks (int): Total number of blocks to place on the grid.</span>
+</span><span id="SinglePuzzle-16"><a href="#SinglePuzzle-16"><span class="linenos">16</span></a>
+</span><span id="SinglePuzzle-17"><a href="#SinglePuzzle-17"><span class="linenos">17</span></a><span class="sd">            colors (list of str): List of colors to use for the blocks.</span>
+</span><span id="SinglePuzzle-18"><a href="#SinglePuzzle-18"><span class="linenos">18</span></a>
+</span><span id="SinglePuzzle-19"><a href="#SinglePuzzle-19"><span class="linenos">19</span></a><span class="sd">            nb_moves (int): Upper bound on the number of moves in the optimal solution. The generator ensures the puzzle can be solved in at most this number of moves.</span>
 </span><span id="SinglePuzzle-20"><a href="#SinglePuzzle-20"><span class="linenos">20</span></a>
-</span><span id="SinglePuzzle-21"><a href="#SinglePuzzle-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SinglePuzzle-22"><a href="#SinglePuzzle-22"><span class="linenos">22</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the puzzle grid.&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle-23"><a href="#SinglePuzzle-23"><span class="linenos">23</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">initialize_grid</span><span class="p">()</span>
-</span><span id="SinglePuzzle-24"><a href="#SinglePuzzle-24"><span class="linenos">24</span></a>
-</span><span id="SinglePuzzle-25"><a href="#SinglePuzzle-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SinglePuzzle-26"><a href="#SinglePuzzle-26"><span class="linenos">26</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the puzzle grid.&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle-27"><a href="#SinglePuzzle-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">print_initial_grid</span><span class="p">()</span>
-</span><span id="SinglePuzzle-28"><a href="#SinglePuzzle-28"><span class="linenos">28</span></a>
-</span><span id="SinglePuzzle-29"><a href="#SinglePuzzle-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SinglePuzzle-30"><a href="#SinglePuzzle-30"><span class="linenos">30</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Solve the puzzle and store the solution.&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle-31"><a href="#SinglePuzzle-31"><span class="linenos">31</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">BFSSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">PuzzleLogic</span><span class="p">())</span>
-</span><span id="SinglePuzzle-32"><a href="#SinglePuzzle-32"><span class="linenos">32</span></a>        <span class="n">is_solvable</span><span class="p">,</span> <span class="n">solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">perform_all_blocks_moves</span><span class="p">()</span>
-</span><span id="SinglePuzzle-33"><a href="#SinglePuzzle-33"><span class="linenos">33</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="n">solution</span> <span class="k">if</span> <span class="n">is_solvable</span> <span class="k">else</span> <span class="kc">None</span>
-</span><span id="SinglePuzzle-34"><a href="#SinglePuzzle-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span>
-</span><span id="SinglePuzzle-35"><a href="#SinglePuzzle-35"><span class="linenos">35</span></a>    
-</span><span id="SinglePuzzle-36"><a href="#SinglePuzzle-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SinglePuzzle-37"><a href="#SinglePuzzle-37"><span class="linenos">37</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the solution if available.&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle-38"><a href="#SinglePuzzle-38"><span class="linenos">38</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">:</span>
-</span><span id="SinglePuzzle-39"><a href="#SinglePuzzle-39"><span class="linenos">39</span></a>            <span class="n">BFSSolver</span><span class="o">.</span><span class="n">print_history</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="SinglePuzzle-40"><a href="#SinglePuzzle-40"><span class="linenos">40</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="SinglePuzzle-41"><a href="#SinglePuzzle-41"><span class="linenos">41</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found.&quot;</span><span class="p">)</span>
+</span><span id="SinglePuzzle-21"><a href="#SinglePuzzle-21"><span class="linenos">21</span></a><span class="sd">            grid_size (tuple of int): Dimensions of the grid as (rows, columns).</span>
+</span><span id="SinglePuzzle-22"><a href="#SinglePuzzle-22"><span class="linenos">22</span></a>
+</span><span id="SinglePuzzle-23"><a href="#SinglePuzzle-23"><span class="linenos">23</span></a><span class="sd">            stack_probability (float, optional): Probability of stacking blocks vertically. Default is 0.75.</span>
+</span><span id="SinglePuzzle-24"><a href="#SinglePuzzle-24"><span class="linenos">24</span></a><span class="sd">            </span>
+</span><span id="SinglePuzzle-25"><a href="#SinglePuzzle-25"><span class="linenos">25</span></a><span class="sd">            blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.</span>
+</span><span id="SinglePuzzle-26"><a href="#SinglePuzzle-26"><span class="linenos">26</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle-27"><a href="#SinglePuzzle-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">GridInitializer</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">stack_probability</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="p">)</span>
+</span><span id="SinglePuzzle-28"><a href="#SinglePuzzle-28"><span class="linenos">28</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SinglePuzzle-29"><a href="#SinglePuzzle-29"><span class="linenos">29</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SinglePuzzle-30"><a href="#SinglePuzzle-30"><span class="linenos">30</span></a>
+</span><span id="SinglePuzzle-31"><a href="#SinglePuzzle-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SinglePuzzle-32"><a href="#SinglePuzzle-32"><span class="linenos">32</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the puzzle grid with the specified configuration.&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle-33"><a href="#SinglePuzzle-33"><span class="linenos">33</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">initialize_grid</span><span class="p">()</span>
+</span><span id="SinglePuzzle-34"><a href="#SinglePuzzle-34"><span class="linenos">34</span></a>
+</span><span id="SinglePuzzle-35"><a href="#SinglePuzzle-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SinglePuzzle-36"><a href="#SinglePuzzle-36"><span class="linenos">36</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the initial state of the puzzle grid.&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle-37"><a href="#SinglePuzzle-37"><span class="linenos">37</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">print_initial_grid</span><span class="p">()</span>
+</span><span id="SinglePuzzle-38"><a href="#SinglePuzzle-38"><span class="linenos">38</span></a>
+</span><span id="SinglePuzzle-39"><a href="#SinglePuzzle-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SinglePuzzle-40"><a href="#SinglePuzzle-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle-41"><a href="#SinglePuzzle-41"><span class="linenos">41</span></a><span class="sd">        Attempt to solve the puzzle using BFS.</span>
+</span><span id="SinglePuzzle-42"><a href="#SinglePuzzle-42"><span class="linenos">42</span></a>
+</span><span id="SinglePuzzle-43"><a href="#SinglePuzzle-43"><span class="linenos">43</span></a><span class="sd">        Returns:</span>
+</span><span id="SinglePuzzle-44"><a href="#SinglePuzzle-44"><span class="linenos">44</span></a><span class="sd">            list or None: A list of moves if the puzzle is solvable; otherwise, None.</span>
+</span><span id="SinglePuzzle-45"><a href="#SinglePuzzle-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle-46"><a href="#SinglePuzzle-46"><span class="linenos">46</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">BFSSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">PuzzleLogic</span><span class="p">())</span>
+</span><span id="SinglePuzzle-47"><a href="#SinglePuzzle-47"><span class="linenos">47</span></a>        <span class="n">is_solvable</span><span class="p">,</span> <span class="n">solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">perform_all_blocks_moves</span><span class="p">()</span>
+</span><span id="SinglePuzzle-48"><a href="#SinglePuzzle-48"><span class="linenos">48</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="n">solution</span> <span class="k">if</span> <span class="n">is_solvable</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="SinglePuzzle-49"><a href="#SinglePuzzle-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span>
+</span><span id="SinglePuzzle-50"><a href="#SinglePuzzle-50"><span class="linenos">50</span></a>    
+</span><span id="SinglePuzzle-51"><a href="#SinglePuzzle-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SinglePuzzle-52"><a href="#SinglePuzzle-52"><span class="linenos">52</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the solution path if one was found.&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle-53"><a href="#SinglePuzzle-53"><span class="linenos">53</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">:</span>
+</span><span id="SinglePuzzle-54"><a href="#SinglePuzzle-54"><span class="linenos">54</span></a>            <span class="n">BFSSolver</span><span class="o">.</span><span class="n">print_history</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="SinglePuzzle-55"><a href="#SinglePuzzle-55"><span class="linenos">55</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="SinglePuzzle-56"><a href="#SinglePuzzle-56"><span class="linenos">56</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found.&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
-    
+            <div class="docstring"><p>User-facing interface for generating and solving a single Match-3 puzzle instance.
+Wraps the core logic to provide a simplified API.</p>
+</div>
+
 
                             <div id="SinglePuzzle.__init__" class="classattr">
                                         <input id="SinglePuzzle.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
@@ -263,33 +325,46 @@
 
     </div>
     <a class="headerlink" href="#SinglePuzzle.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.__init__-5"><a href="#SinglePuzzle.__init__-5"><span class="linenos"> 5</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-</span><span id="SinglePuzzle.__init__-6"><a href="#SinglePuzzle.__init__-6"><span class="linenos"> 6</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle.__init__-7"><a href="#SinglePuzzle.__init__-7"><span class="linenos"> 7</span></a><span class="sd">        Initialize the SinglePuzzle frontend.</span>
-</span><span id="SinglePuzzle.__init__-8"><a href="#SinglePuzzle.__init__-8"><span class="linenos"> 8</span></a>
-</span><span id="SinglePuzzle.__init__-9"><a href="#SinglePuzzle.__init__-9"><span class="linenos"> 9</span></a><span class="sd">        Args:</span>
-</span><span id="SinglePuzzle.__init__-10"><a href="#SinglePuzzle.__init__-10"><span class="linenos">10</span></a><span class="sd">            nb_blocks (int): Number of blocks.</span>
-</span><span id="SinglePuzzle.__init__-11"><a href="#SinglePuzzle.__init__-11"><span class="linenos">11</span></a><span class="sd">            colors (list): List of colors.</span>
-</span><span id="SinglePuzzle.__init__-12"><a href="#SinglePuzzle.__init__-12"><span class="linenos">12</span></a><span class="sd">            nb_moves (int): Number of moves to solve.</span>
-</span><span id="SinglePuzzle.__init__-13"><a href="#SinglePuzzle.__init__-13"><span class="linenos">13</span></a><span class="sd">            grid_size (tuple): (rows, cols) of the grid.</span>
-</span><span id="SinglePuzzle.__init__-14"><a href="#SinglePuzzle.__init__-14"><span class="linenos">14</span></a><span class="sd">            stack_probability (float): Probability to stack blocks.</span>
-</span><span id="SinglePuzzle.__init__-15"><a href="#SinglePuzzle.__init__-15"><span class="linenos">15</span></a><span class="sd">            blocks_gap (int): Minimum gap between blocks in a row.</span>
-</span><span id="SinglePuzzle.__init__-16"><a href="#SinglePuzzle.__init__-16"><span class="linenos">16</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle.__init__-17"><a href="#SinglePuzzle.__init__-17"><span class="linenos">17</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">GridInitializer</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">stack_probability</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="p">)</span>
-</span><span id="SinglePuzzle.__init__-18"><a href="#SinglePuzzle.__init__-18"><span class="linenos">18</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="kc">None</span>
-</span><span id="SinglePuzzle.__init__-19"><a href="#SinglePuzzle.__init__-19"><span class="linenos">19</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="kc">None</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.__init__-9"><a href="#SinglePuzzle.__init__-9"><span class="linenos"> 9</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="SinglePuzzle.__init__-10"><a href="#SinglePuzzle.__init__-10"><span class="linenos">10</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle.__init__-11"><a href="#SinglePuzzle.__init__-11"><span class="linenos">11</span></a><span class="sd">        Initialize the SinglePuzzle frontend.</span>
+</span><span id="SinglePuzzle.__init__-12"><a href="#SinglePuzzle.__init__-12"><span class="linenos">12</span></a>
+</span><span id="SinglePuzzle.__init__-13"><a href="#SinglePuzzle.__init__-13"><span class="linenos">13</span></a><span class="sd">        Args:</span>
+</span><span id="SinglePuzzle.__init__-14"><a href="#SinglePuzzle.__init__-14"><span class="linenos">14</span></a>
+</span><span id="SinglePuzzle.__init__-15"><a href="#SinglePuzzle.__init__-15"><span class="linenos">15</span></a><span class="sd">            nb_blocks (int): Total number of blocks to place on the grid.</span>
+</span><span id="SinglePuzzle.__init__-16"><a href="#SinglePuzzle.__init__-16"><span class="linenos">16</span></a>
+</span><span id="SinglePuzzle.__init__-17"><a href="#SinglePuzzle.__init__-17"><span class="linenos">17</span></a><span class="sd">            colors (list of str): List of colors to use for the blocks.</span>
+</span><span id="SinglePuzzle.__init__-18"><a href="#SinglePuzzle.__init__-18"><span class="linenos">18</span></a>
+</span><span id="SinglePuzzle.__init__-19"><a href="#SinglePuzzle.__init__-19"><span class="linenos">19</span></a><span class="sd">            nb_moves (int): Upper bound on the number of moves in the optimal solution. The generator ensures the puzzle can be solved in at most this number of moves.</span>
+</span><span id="SinglePuzzle.__init__-20"><a href="#SinglePuzzle.__init__-20"><span class="linenos">20</span></a>
+</span><span id="SinglePuzzle.__init__-21"><a href="#SinglePuzzle.__init__-21"><span class="linenos">21</span></a><span class="sd">            grid_size (tuple of int): Dimensions of the grid as (rows, columns).</span>
+</span><span id="SinglePuzzle.__init__-22"><a href="#SinglePuzzle.__init__-22"><span class="linenos">22</span></a>
+</span><span id="SinglePuzzle.__init__-23"><a href="#SinglePuzzle.__init__-23"><span class="linenos">23</span></a><span class="sd">            stack_probability (float, optional): Probability of stacking blocks vertically. Default is 0.75.</span>
+</span><span id="SinglePuzzle.__init__-24"><a href="#SinglePuzzle.__init__-24"><span class="linenos">24</span></a><span class="sd">            </span>
+</span><span id="SinglePuzzle.__init__-25"><a href="#SinglePuzzle.__init__-25"><span class="linenos">25</span></a><span class="sd">            blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.</span>
+</span><span id="SinglePuzzle.__init__-26"><a href="#SinglePuzzle.__init__-26"><span class="linenos">26</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle.__init__-27"><a href="#SinglePuzzle.__init__-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span> <span class="o">=</span> <span class="n">GridInitializer</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_blocks</span><span class="p">,</span> <span class="n">colors</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">stack_probability</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="p">)</span>
+</span><span id="SinglePuzzle.__init__-28"><a href="#SinglePuzzle.__init__-28"><span class="linenos">28</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="kc">None</span>
+</span><span id="SinglePuzzle.__init__-29"><a href="#SinglePuzzle.__init__-29"><span class="linenos">29</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="kc">None</span>
 </span></pre></div>
 
 
             <div class="docstring"><p>Initialize the SinglePuzzle frontend.</p>
 
-<p>Args:
-    nb_blocks (int): Number of blocks.
-    colors (list): List of colors.
-    nb_moves (int): Number of moves to solve.
-    grid_size (tuple): (rows, cols) of the grid.
-    stack_probability (float): Probability to stack blocks.
-    blocks_gap (int): Minimum gap between blocks in a row.</p>
+<p>Args:</p>
+
+<pre><code>nb_blocks (int): Total number of blocks to place on the grid.
+
+colors (list of str): List of colors to use for the blocks.
+
+nb_moves (int): Upper bound on the number of moves in the optimal solution. The generator ensures the puzzle can be solved in at most this number of moves.
+
+grid_size (tuple of int): Dimensions of the grid as (rows, columns).
+
+stack_probability (float, optional): Probability of stacking blocks vertically. Default is 0.75.
+
+blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.
+</code></pre>
 </div>
 
 
@@ -338,13 +413,13 @@
 
     </div>
     <a class="headerlink" href="#SinglePuzzle.generate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.generate-21"><a href="#SinglePuzzle.generate-21"><span class="linenos">21</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SinglePuzzle.generate-22"><a href="#SinglePuzzle.generate-22"><span class="linenos">22</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the puzzle grid.&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle.generate-23"><a href="#SinglePuzzle.generate-23"><span class="linenos">23</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">initialize_grid</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.generate-31"><a href="#SinglePuzzle.generate-31"><span class="linenos">31</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SinglePuzzle.generate-32"><a href="#SinglePuzzle.generate-32"><span class="linenos">32</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the puzzle grid with the specified configuration.&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle.generate-33"><a href="#SinglePuzzle.generate-33"><span class="linenos">33</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">initialize_grid</span><span class="p">()</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Generate the puzzle grid.</p>
+            <div class="docstring"><p>Initialize the puzzle grid with the specified configuration.</p>
 </div>
 
 
@@ -360,13 +435,13 @@
 
     </div>
     <a class="headerlink" href="#SinglePuzzle.show"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.show-25"><a href="#SinglePuzzle.show-25"><span class="linenos">25</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SinglePuzzle.show-26"><a href="#SinglePuzzle.show-26"><span class="linenos">26</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the puzzle grid.&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle.show-27"><a href="#SinglePuzzle.show-27"><span class="linenos">27</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">print_initial_grid</span><span class="p">()</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.show-35"><a href="#SinglePuzzle.show-35"><span class="linenos">35</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SinglePuzzle.show-36"><a href="#SinglePuzzle.show-36"><span class="linenos">36</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the initial state of the puzzle grid.&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle.show-37"><a href="#SinglePuzzle.show-37"><span class="linenos">37</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">print_initial_grid</span><span class="p">()</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Display the puzzle grid.</p>
+            <div class="docstring"><p>Display the initial state of the puzzle grid.</p>
 </div>
 
 
@@ -382,16 +457,24 @@
 
     </div>
     <a class="headerlink" href="#SinglePuzzle.solve"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.solve-29"><a href="#SinglePuzzle.solve-29"><span class="linenos">29</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SinglePuzzle.solve-30"><a href="#SinglePuzzle.solve-30"><span class="linenos">30</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Solve the puzzle and store the solution.&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle.solve-31"><a href="#SinglePuzzle.solve-31"><span class="linenos">31</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">BFSSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">PuzzleLogic</span><span class="p">())</span>
-</span><span id="SinglePuzzle.solve-32"><a href="#SinglePuzzle.solve-32"><span class="linenos">32</span></a>        <span class="n">is_solvable</span><span class="p">,</span> <span class="n">solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">perform_all_blocks_moves</span><span class="p">()</span>
-</span><span id="SinglePuzzle.solve-33"><a href="#SinglePuzzle.solve-33"><span class="linenos">33</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="n">solution</span> <span class="k">if</span> <span class="n">is_solvable</span> <span class="k">else</span> <span class="kc">None</span>
-</span><span id="SinglePuzzle.solve-34"><a href="#SinglePuzzle.solve-34"><span class="linenos">34</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.solve-39"><a href="#SinglePuzzle.solve-39"><span class="linenos">39</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">solve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SinglePuzzle.solve-40"><a href="#SinglePuzzle.solve-40"><span class="linenos">40</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle.solve-41"><a href="#SinglePuzzle.solve-41"><span class="linenos">41</span></a><span class="sd">        Attempt to solve the puzzle using BFS.</span>
+</span><span id="SinglePuzzle.solve-42"><a href="#SinglePuzzle.solve-42"><span class="linenos">42</span></a>
+</span><span id="SinglePuzzle.solve-43"><a href="#SinglePuzzle.solve-43"><span class="linenos">43</span></a><span class="sd">        Returns:</span>
+</span><span id="SinglePuzzle.solve-44"><a href="#SinglePuzzle.solve-44"><span class="linenos">44</span></a><span class="sd">            list or None: A list of moves if the puzzle is solvable; otherwise, None.</span>
+</span><span id="SinglePuzzle.solve-45"><a href="#SinglePuzzle.solve-45"><span class="linenos">45</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle.solve-46"><a href="#SinglePuzzle.solve-46"><span class="linenos">46</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solver</span> <span class="o">=</span> <span class="n">BFSSolver</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">PuzzleLogic</span><span class="p">())</span>
+</span><span id="SinglePuzzle.solve-47"><a href="#SinglePuzzle.solve-47"><span class="linenos">47</span></a>        <span class="n">is_solvable</span><span class="p">,</span> <span class="n">solution</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">solver</span><span class="o">.</span><span class="n">perform_all_blocks_moves</span><span class="p">()</span>
+</span><span id="SinglePuzzle.solve-48"><a href="#SinglePuzzle.solve-48"><span class="linenos">48</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">solution</span> <span class="o">=</span> <span class="n">solution</span> <span class="k">if</span> <span class="n">is_solvable</span> <span class="k">else</span> <span class="kc">None</span>
+</span><span id="SinglePuzzle.solve-49"><a href="#SinglePuzzle.solve-49"><span class="linenos">49</span></a>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Solve the puzzle and store the solution.</p>
+            <div class="docstring"><p>Attempt to solve the puzzle using BFS.</p>
+
+<p>Returns:
+    list or None: A list of moves if the puzzle is solvable; otherwise, None.</p>
 </div>
 
 
@@ -407,16 +490,16 @@
 
     </div>
     <a class="headerlink" href="#SinglePuzzle.show_solution"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.show_solution-36"><a href="#SinglePuzzle.show_solution-36"><span class="linenos">36</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="SinglePuzzle.show_solution-37"><a href="#SinglePuzzle.show_solution-37"><span class="linenos">37</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the solution if available.&quot;&quot;&quot;</span>
-</span><span id="SinglePuzzle.show_solution-38"><a href="#SinglePuzzle.show_solution-38"><span class="linenos">38</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">:</span>
-</span><span id="SinglePuzzle.show_solution-39"><a href="#SinglePuzzle.show_solution-39"><span class="linenos">39</span></a>            <span class="n">BFSSolver</span><span class="o">.</span><span class="n">print_history</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="SinglePuzzle.show_solution-40"><a href="#SinglePuzzle.show_solution-40"><span class="linenos">40</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="SinglePuzzle.show_solution-41"><a href="#SinglePuzzle.show_solution-41"><span class="linenos">41</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found.&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="SinglePuzzle.show_solution-51"><a href="#SinglePuzzle.show_solution-51"><span class="linenos">51</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="SinglePuzzle.show_solution-52"><a href="#SinglePuzzle.show_solution-52"><span class="linenos">52</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display the solution path if one was found.&quot;&quot;&quot;</span>
+</span><span id="SinglePuzzle.show_solution-53"><a href="#SinglePuzzle.show_solution-53"><span class="linenos">53</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">:</span>
+</span><span id="SinglePuzzle.show_solution-54"><a href="#SinglePuzzle.show_solution-54"><span class="linenos">54</span></a>            <span class="n">BFSSolver</span><span class="o">.</span><span class="n">print_history</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">solution</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="SinglePuzzle.show_solution-55"><a href="#SinglePuzzle.show_solution-55"><span class="linenos">55</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="SinglePuzzle.show_solution-56"><a href="#SinglePuzzle.show_solution-56"><span class="linenos">56</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No solution found.&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Display the solution if available.</p>
+            <div class="docstring"><p>Display the solution path if one was found.</p>
 </div>
 
 
@@ -433,95 +516,158 @@
 
     </div>
     <a class="headerlink" href="#PuzzleBatch"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch-43"><a href="#PuzzleBatch-43"><span class="linenos">43</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PuzzleBatch</span><span class="p">:</span>
-</span><span id="PuzzleBatch-44"><a href="#PuzzleBatch-44"><span class="linenos">44</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">):</span>
-</span><span id="PuzzleBatch-45"><a href="#PuzzleBatch-45"><span class="linenos">45</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch-46"><a href="#PuzzleBatch-46"><span class="linenos">46</span></a><span class="sd">        Frontend interface to generate a batch of puzzles.</span>
-</span><span id="PuzzleBatch-47"><a href="#PuzzleBatch-47"><span class="linenos">47</span></a>
-</span><span id="PuzzleBatch-48"><a href="#PuzzleBatch-48"><span class="linenos">48</span></a><span class="sd">        Args:</span>
-</span><span id="PuzzleBatch-49"><a href="#PuzzleBatch-49"><span class="linenos">49</span></a><span class="sd">            blocks_range (tuple): (min, max) number of blocks.</span>
-</span><span id="PuzzleBatch-50"><a href="#PuzzleBatch-50"><span class="linenos">50</span></a><span class="sd">            colors_range (tuple): (min, max) number of colors.</span>
-</span><span id="PuzzleBatch-51"><a href="#PuzzleBatch-51"><span class="linenos">51</span></a><span class="sd">            colors_blocks (list): List of possible colors.</span>
-</span><span id="PuzzleBatch-52"><a href="#PuzzleBatch-52"><span class="linenos">52</span></a><span class="sd">            nb_moves (int): Number of moves to solve.</span>
-</span><span id="PuzzleBatch-53"><a href="#PuzzleBatch-53"><span class="linenos">53</span></a><span class="sd">            grid_size (tuple): Grid size (rows, columns).</span>
-</span><span id="PuzzleBatch-54"><a href="#PuzzleBatch-54"><span class="linenos">54</span></a><span class="sd">            stack_probability (float): Probability to stack blocks.</span>
-</span><span id="PuzzleBatch-55"><a href="#PuzzleBatch-55"><span class="linenos">55</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch-56"><a href="#PuzzleBatch-56"><span class="linenos">56</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">PuzzleBatchGenerator</span><span class="p">(</span>
-</span><span id="PuzzleBatch-57"><a href="#PuzzleBatch-57"><span class="linenos">57</span></a>            <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span>
-</span><span id="PuzzleBatch-58"><a href="#PuzzleBatch-58"><span class="linenos">58</span></a>        <span class="p">)</span>
-</span><span id="PuzzleBatch-59"><a href="#PuzzleBatch-59"><span class="linenos">59</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">False</span>
-</span><span id="PuzzleBatch-60"><a href="#PuzzleBatch-60"><span class="linenos">60</span></a>
-</span><span id="PuzzleBatch-61"><a href="#PuzzleBatch-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="PuzzleBatch-62"><a href="#PuzzleBatch-62"><span class="linenos">62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the batch of puzzles.&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch-63"><a href="#PuzzleBatch-63"><span class="linenos">63</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">generate_puzzles</span><span class="p">()</span>
-</span><span id="PuzzleBatch-64"><a href="#PuzzleBatch-64"><span class="linenos">64</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">compute_stats</span><span class="p">()</span>
-</span><span id="PuzzleBatch-65"><a href="#PuzzleBatch-65"><span class="linenos">65</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">True</span>
-</span><span id="PuzzleBatch-66"><a href="#PuzzleBatch-66"><span class="linenos">66</span></a>
-</span><span id="PuzzleBatch-67"><a href="#PuzzleBatch-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="PuzzleBatch-68"><a href="#PuzzleBatch-68"><span class="linenos">68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display batch statistics (bar chart, pie chart).&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch-69"><a href="#PuzzleBatch-69"><span class="linenos">69</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
-</span><span id="PuzzleBatch-70"><a href="#PuzzleBatch-70"><span class="linenos">70</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_charts</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="PuzzleBatch-71"><a href="#PuzzleBatch-71"><span class="linenos">71</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="PuzzleBatch-72"><a href="#PuzzleBatch-72"><span class="linenos">72</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
-</span><span id="PuzzleBatch-73"><a href="#PuzzleBatch-73"><span class="linenos">73</span></a>
-</span><span id="PuzzleBatch-74"><a href="#PuzzleBatch-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-</span><span id="PuzzleBatch-75"><a href="#PuzzleBatch-75"><span class="linenos">75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Save all batch grids as a PDF file.&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch-76"><a href="#PuzzleBatch-76"><span class="linenos">76</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
-</span><span id="PuzzleBatch-77"><a href="#PuzzleBatch-77"><span class="linenos">77</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_and_save_batch</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="PuzzleBatch-78"><a href="#PuzzleBatch-78"><span class="linenos">78</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PDF saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="PuzzleBatch-79"><a href="#PuzzleBatch-79"><span class="linenos">79</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="PuzzleBatch-80"><a href="#PuzzleBatch-80"><span class="linenos">80</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
-</span><span id="PuzzleBatch-81"><a href="#PuzzleBatch-81"><span class="linenos">81</span></a>
-</span><span id="PuzzleBatch-82"><a href="#PuzzleBatch-82"><span class="linenos">82</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-</span><span id="PuzzleBatch-83"><a href="#PuzzleBatch-83"><span class="linenos">83</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Save batch data as a CSV file.&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch-84"><a href="#PuzzleBatch-84"><span class="linenos">84</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
-</span><span id="PuzzleBatch-85"><a href="#PuzzleBatch-85"><span class="linenos">85</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">save_results_as_csv</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="PuzzleBatch-86"><a href="#PuzzleBatch-86"><span class="linenos">86</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CSV saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="PuzzleBatch-87"><a href="#PuzzleBatch-87"><span class="linenos">87</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="PuzzleBatch-88"><a href="#PuzzleBatch-88"><span class="linenos">88</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch-58"><a href="#PuzzleBatch-58"><span class="linenos"> 58</span></a><span class="k">class</span><span class="w"> </span><span class="nc">PuzzleBatch</span><span class="p">:</span>
+</span><span id="PuzzleBatch-59"><a href="#PuzzleBatch-59"><span class="linenos"> 59</span></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-60"><a href="#PuzzleBatch-60"><span class="linenos"> 60</span></a><span class="sd">    Frontend interface for generating and exporting multiple puzzles with varying parameters.</span>
+</span><span id="PuzzleBatch-61"><a href="#PuzzleBatch-61"><span class="linenos"> 61</span></a><span class="sd">    Useful for statistical analysis or dataset creation.</span>
+</span><span id="PuzzleBatch-62"><a href="#PuzzleBatch-62"><span class="linenos"> 62</span></a><span class="sd">    &quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-63"><a href="#PuzzleBatch-63"><span class="linenos"> 63</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_attempts</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="PuzzleBatch-64"><a href="#PuzzleBatch-64"><span class="linenos"> 64</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-65"><a href="#PuzzleBatch-65"><span class="linenos"> 65</span></a><span class="sd">        Initialize the batch puzzle generator.</span>
+</span><span id="PuzzleBatch-66"><a href="#PuzzleBatch-66"><span class="linenos"> 66</span></a>
+</span><span id="PuzzleBatch-67"><a href="#PuzzleBatch-67"><span class="linenos"> 67</span></a><span class="sd">        Args:</span>
+</span><span id="PuzzleBatch-68"><a href="#PuzzleBatch-68"><span class="linenos"> 68</span></a>
+</span><span id="PuzzleBatch-69"><a href="#PuzzleBatch-69"><span class="linenos"> 69</span></a><span class="sd">            blocks_range (tuple of int): Range of block counts to iterate over as (min_blocks, max_blocks).</span>
+</span><span id="PuzzleBatch-70"><a href="#PuzzleBatch-70"><span class="linenos"> 70</span></a><span class="sd">                For each block count in this range, puzzles will be generated.</span>
+</span><span id="PuzzleBatch-71"><a href="#PuzzleBatch-71"><span class="linenos"> 71</span></a><span class="sd">            </span>
+</span><span id="PuzzleBatch-72"><a href="#PuzzleBatch-72"><span class="linenos"> 72</span></a><span class="sd">            colors_range (tuple of int): Range of color counts to iterate over as (min_colors, max_colors).</span>
+</span><span id="PuzzleBatch-73"><a href="#PuzzleBatch-73"><span class="linenos"> 73</span></a><span class="sd">                For each color count in this range, puzzles will be generated.</span>
+</span><span id="PuzzleBatch-74"><a href="#PuzzleBatch-74"><span class="linenos"> 74</span></a>
+</span><span id="PuzzleBatch-75"><a href="#PuzzleBatch-75"><span class="linenos"> 75</span></a><span class="sd">            colors_blocks (list of str): Pool of possible block colors to choose from.</span>
+</span><span id="PuzzleBatch-76"><a href="#PuzzleBatch-76"><span class="linenos"> 76</span></a>
+</span><span id="PuzzleBatch-77"><a href="#PuzzleBatch-77"><span class="linenos"> 77</span></a><span class="sd">            nb_moves (int): Maximum number of moves allowed in the optimal solution.</span>
+</span><span id="PuzzleBatch-78"><a href="#PuzzleBatch-78"><span class="linenos"> 78</span></a><span class="sd">                The generator attempts to create puzzles solvable within this limit.</span>
+</span><span id="PuzzleBatch-79"><a href="#PuzzleBatch-79"><span class="linenos"> 79</span></a>
+</span><span id="PuzzleBatch-80"><a href="#PuzzleBatch-80"><span class="linenos"> 80</span></a><span class="sd">            grid_size (tuple of int): Dimensions of the puzzle grid as (rows, columns).</span>
+</span><span id="PuzzleBatch-81"><a href="#PuzzleBatch-81"><span class="linenos"> 81</span></a>
+</span><span id="PuzzleBatch-82"><a href="#PuzzleBatch-82"><span class="linenos"> 82</span></a><span class="sd">            nb_attempts (int, optional): Number of attempts to generate a solvable puzzle for each</span>
+</span><span id="PuzzleBatch-83"><a href="#PuzzleBatch-83"><span class="linenos"> 83</span></a><span class="sd">                combination of blocks and colors. If no valid puzzle is found after these attempts,</span>
+</span><span id="PuzzleBatch-84"><a href="#PuzzleBatch-84"><span class="linenos"> 84</span></a><span class="sd">                no puzzle is generated for that combination. Default is 5.</span>
+</span><span id="PuzzleBatch-85"><a href="#PuzzleBatch-85"><span class="linenos"> 85</span></a>
+</span><span id="PuzzleBatch-86"><a href="#PuzzleBatch-86"><span class="linenos"> 86</span></a><span class="sd">            stack_probability (float, optional): Probability to stack blocks vertically during generation.</span>
+</span><span id="PuzzleBatch-87"><a href="#PuzzleBatch-87"><span class="linenos"> 87</span></a><span class="sd">                Default is 0.75.</span>
+</span><span id="PuzzleBatch-88"><a href="#PuzzleBatch-88"><span class="linenos"> 88</span></a><span class="sd">            blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.</span>
+</span><span id="PuzzleBatch-89"><a href="#PuzzleBatch-89"><span class="linenos"> 89</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-90"><a href="#PuzzleBatch-90"><span class="linenos"> 90</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">PuzzleBatchGenerator</span><span class="p">(</span>
+</span><span id="PuzzleBatch-91"><a href="#PuzzleBatch-91"><span class="linenos"> 91</span></a>            <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_attempts</span><span class="p">,</span> <span class="n">stack_probability</span><span class="p">,</span> <span class="n">blocks_gap</span>
+</span><span id="PuzzleBatch-92"><a href="#PuzzleBatch-92"><span class="linenos"> 92</span></a>        <span class="p">)</span>
+</span><span id="PuzzleBatch-93"><a href="#PuzzleBatch-93"><span class="linenos"> 93</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">False</span>
+</span><span id="PuzzleBatch-94"><a href="#PuzzleBatch-94"><span class="linenos"> 94</span></a>
+</span><span id="PuzzleBatch-95"><a href="#PuzzleBatch-95"><span class="linenos"> 95</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="PuzzleBatch-96"><a href="#PuzzleBatch-96"><span class="linenos"> 96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a batch of puzzles based on the configured parameter ranges.&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-97"><a href="#PuzzleBatch-97"><span class="linenos"> 97</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">generate_puzzles</span><span class="p">()</span>
+</span><span id="PuzzleBatch-98"><a href="#PuzzleBatch-98"><span class="linenos"> 98</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">compute_stats</span><span class="p">()</span>
+</span><span id="PuzzleBatch-99"><a href="#PuzzleBatch-99"><span class="linenos"> 99</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">True</span>
+</span><span id="PuzzleBatch-100"><a href="#PuzzleBatch-100"><span class="linenos">100</span></a>
+</span><span id="PuzzleBatch-101"><a href="#PuzzleBatch-101"><span class="linenos">101</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="PuzzleBatch-102"><a href="#PuzzleBatch-102"><span class="linenos">102</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display statistical charts for the generated batch (e.g., bar chart and pie chart).&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-103"><a href="#PuzzleBatch-103"><span class="linenos">103</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
+</span><span id="PuzzleBatch-104"><a href="#PuzzleBatch-104"><span class="linenos">104</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_charts</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="PuzzleBatch-105"><a href="#PuzzleBatch-105"><span class="linenos">105</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="PuzzleBatch-106"><a href="#PuzzleBatch-106"><span class="linenos">106</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
+</span><span id="PuzzleBatch-107"><a href="#PuzzleBatch-107"><span class="linenos">107</span></a>
+</span><span id="PuzzleBatch-108"><a href="#PuzzleBatch-108"><span class="linenos">108</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+</span><span id="PuzzleBatch-109"><a href="#PuzzleBatch-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-110"><a href="#PuzzleBatch-110"><span class="linenos">110</span></a><span class="sd">        Export all puzzle grids in the batch as a PDF.</span>
+</span><span id="PuzzleBatch-111"><a href="#PuzzleBatch-111"><span class="linenos">111</span></a>
+</span><span id="PuzzleBatch-112"><a href="#PuzzleBatch-112"><span class="linenos">112</span></a><span class="sd">        Args:</span>
+</span><span id="PuzzleBatch-113"><a href="#PuzzleBatch-113"><span class="linenos">113</span></a><span class="sd">            filename (str): Output filename for the PDF.</span>
+</span><span id="PuzzleBatch-114"><a href="#PuzzleBatch-114"><span class="linenos">114</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-115"><a href="#PuzzleBatch-115"><span class="linenos">115</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
+</span><span id="PuzzleBatch-116"><a href="#PuzzleBatch-116"><span class="linenos">116</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_and_save_batch</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="PuzzleBatch-117"><a href="#PuzzleBatch-117"><span class="linenos">117</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PDF saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="PuzzleBatch-118"><a href="#PuzzleBatch-118"><span class="linenos">118</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="PuzzleBatch-119"><a href="#PuzzleBatch-119"><span class="linenos">119</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
+</span><span id="PuzzleBatch-120"><a href="#PuzzleBatch-120"><span class="linenos">120</span></a>
+</span><span id="PuzzleBatch-121"><a href="#PuzzleBatch-121"><span class="linenos">121</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+</span><span id="PuzzleBatch-122"><a href="#PuzzleBatch-122"><span class="linenos">122</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-123"><a href="#PuzzleBatch-123"><span class="linenos">123</span></a><span class="sd">        Export puzzle metadata and configuration results as a CSV file.</span>
+</span><span id="PuzzleBatch-124"><a href="#PuzzleBatch-124"><span class="linenos">124</span></a>
+</span><span id="PuzzleBatch-125"><a href="#PuzzleBatch-125"><span class="linenos">125</span></a><span class="sd">        Args:</span>
+</span><span id="PuzzleBatch-126"><a href="#PuzzleBatch-126"><span class="linenos">126</span></a><span class="sd">            filename (str): Output filename for the CSV.</span>
+</span><span id="PuzzleBatch-127"><a href="#PuzzleBatch-127"><span class="linenos">127</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch-128"><a href="#PuzzleBatch-128"><span class="linenos">128</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
+</span><span id="PuzzleBatch-129"><a href="#PuzzleBatch-129"><span class="linenos">129</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">save_results_as_csv</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="PuzzleBatch-130"><a href="#PuzzleBatch-130"><span class="linenos">130</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CSV saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="PuzzleBatch-131"><a href="#PuzzleBatch-131"><span class="linenos">131</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="PuzzleBatch-132"><a href="#PuzzleBatch-132"><span class="linenos">132</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
-    
+            <div class="docstring"><p>Frontend interface for generating and exporting multiple puzzles with varying parameters.
+Useful for statistical analysis or dataset creation.</p>
+</div>
+
 
                             <div id="PuzzleBatch.__init__" class="classattr">
                                         <input id="PuzzleBatch.__init__-view-source" class="view-source-toggle-state" type="checkbox" aria-hidden="true" tabindex="-1">
 <div class="attr function">
             
-        <span class="name">PuzzleBatch</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">blocks_range</span>,</span><span class="param">	<span class="n">colors_range</span>,</span><span class="param">	<span class="n">colors_blocks</span>,</span><span class="param">	<span class="n">nb_moves</span>,</span><span class="param">	<span class="n">grid_size</span>,</span><span class="param">	<span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span></span>)</span>
+        <span class="name">PuzzleBatch</span><span class="signature pdoc-code multiline">(<span class="param">	<span class="n">blocks_range</span>,</span><span class="param">	<span class="n">colors_range</span>,</span><span class="param">	<span class="n">colors_blocks</span>,</span><span class="param">	<span class="n">nb_moves</span>,</span><span class="param">	<span class="n">grid_size</span>,</span><span class="param">	<span class="n">nb_attempts</span><span class="o">=</span><span class="mi">5</span>,</span><span class="param">	<span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span>,</span><span class="param">	<span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span></span>)</span>
 
                 <label class="view-source-button" for="PuzzleBatch.__init__-view-source"><span>View Source</span></label>
 
     </div>
     <a class="headerlink" href="#PuzzleBatch.__init__"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.__init__-44"><a href="#PuzzleBatch.__init__-44"><span class="linenos">44</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">):</span>
-</span><span id="PuzzleBatch.__init__-45"><a href="#PuzzleBatch.__init__-45"><span class="linenos">45</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch.__init__-46"><a href="#PuzzleBatch.__init__-46"><span class="linenos">46</span></a><span class="sd">        Frontend interface to generate a batch of puzzles.</span>
-</span><span id="PuzzleBatch.__init__-47"><a href="#PuzzleBatch.__init__-47"><span class="linenos">47</span></a>
-</span><span id="PuzzleBatch.__init__-48"><a href="#PuzzleBatch.__init__-48"><span class="linenos">48</span></a><span class="sd">        Args:</span>
-</span><span id="PuzzleBatch.__init__-49"><a href="#PuzzleBatch.__init__-49"><span class="linenos">49</span></a><span class="sd">            blocks_range (tuple): (min, max) number of blocks.</span>
-</span><span id="PuzzleBatch.__init__-50"><a href="#PuzzleBatch.__init__-50"><span class="linenos">50</span></a><span class="sd">            colors_range (tuple): (min, max) number of colors.</span>
-</span><span id="PuzzleBatch.__init__-51"><a href="#PuzzleBatch.__init__-51"><span class="linenos">51</span></a><span class="sd">            colors_blocks (list): List of possible colors.</span>
-</span><span id="PuzzleBatch.__init__-52"><a href="#PuzzleBatch.__init__-52"><span class="linenos">52</span></a><span class="sd">            nb_moves (int): Number of moves to solve.</span>
-</span><span id="PuzzleBatch.__init__-53"><a href="#PuzzleBatch.__init__-53"><span class="linenos">53</span></a><span class="sd">            grid_size (tuple): Grid size (rows, columns).</span>
-</span><span id="PuzzleBatch.__init__-54"><a href="#PuzzleBatch.__init__-54"><span class="linenos">54</span></a><span class="sd">            stack_probability (float): Probability to stack blocks.</span>
-</span><span id="PuzzleBatch.__init__-55"><a href="#PuzzleBatch.__init__-55"><span class="linenos">55</span></a><span class="sd">        &quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch.__init__-56"><a href="#PuzzleBatch.__init__-56"><span class="linenos">56</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">PuzzleBatchGenerator</span><span class="p">(</span>
-</span><span id="PuzzleBatch.__init__-57"><a href="#PuzzleBatch.__init__-57"><span class="linenos">57</span></a>            <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">stack_probability</span>
-</span><span id="PuzzleBatch.__init__-58"><a href="#PuzzleBatch.__init__-58"><span class="linenos">58</span></a>        <span class="p">)</span>
-</span><span id="PuzzleBatch.__init__-59"><a href="#PuzzleBatch.__init__-59"><span class="linenos">59</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">False</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.__init__-63"><a href="#PuzzleBatch.__init__-63"><span class="linenos">63</span></a>    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_attempts</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span> <span class="n">stack_probability</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">blocks_gap</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+</span><span id="PuzzleBatch.__init__-64"><a href="#PuzzleBatch.__init__-64"><span class="linenos">64</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch.__init__-65"><a href="#PuzzleBatch.__init__-65"><span class="linenos">65</span></a><span class="sd">        Initialize the batch puzzle generator.</span>
+</span><span id="PuzzleBatch.__init__-66"><a href="#PuzzleBatch.__init__-66"><span class="linenos">66</span></a>
+</span><span id="PuzzleBatch.__init__-67"><a href="#PuzzleBatch.__init__-67"><span class="linenos">67</span></a><span class="sd">        Args:</span>
+</span><span id="PuzzleBatch.__init__-68"><a href="#PuzzleBatch.__init__-68"><span class="linenos">68</span></a>
+</span><span id="PuzzleBatch.__init__-69"><a href="#PuzzleBatch.__init__-69"><span class="linenos">69</span></a><span class="sd">            blocks_range (tuple of int): Range of block counts to iterate over as (min_blocks, max_blocks).</span>
+</span><span id="PuzzleBatch.__init__-70"><a href="#PuzzleBatch.__init__-70"><span class="linenos">70</span></a><span class="sd">                For each block count in this range, puzzles will be generated.</span>
+</span><span id="PuzzleBatch.__init__-71"><a href="#PuzzleBatch.__init__-71"><span class="linenos">71</span></a><span class="sd">            </span>
+</span><span id="PuzzleBatch.__init__-72"><a href="#PuzzleBatch.__init__-72"><span class="linenos">72</span></a><span class="sd">            colors_range (tuple of int): Range of color counts to iterate over as (min_colors, max_colors).</span>
+</span><span id="PuzzleBatch.__init__-73"><a href="#PuzzleBatch.__init__-73"><span class="linenos">73</span></a><span class="sd">                For each color count in this range, puzzles will be generated.</span>
+</span><span id="PuzzleBatch.__init__-74"><a href="#PuzzleBatch.__init__-74"><span class="linenos">74</span></a>
+</span><span id="PuzzleBatch.__init__-75"><a href="#PuzzleBatch.__init__-75"><span class="linenos">75</span></a><span class="sd">            colors_blocks (list of str): Pool of possible block colors to choose from.</span>
+</span><span id="PuzzleBatch.__init__-76"><a href="#PuzzleBatch.__init__-76"><span class="linenos">76</span></a>
+</span><span id="PuzzleBatch.__init__-77"><a href="#PuzzleBatch.__init__-77"><span class="linenos">77</span></a><span class="sd">            nb_moves (int): Maximum number of moves allowed in the optimal solution.</span>
+</span><span id="PuzzleBatch.__init__-78"><a href="#PuzzleBatch.__init__-78"><span class="linenos">78</span></a><span class="sd">                The generator attempts to create puzzles solvable within this limit.</span>
+</span><span id="PuzzleBatch.__init__-79"><a href="#PuzzleBatch.__init__-79"><span class="linenos">79</span></a>
+</span><span id="PuzzleBatch.__init__-80"><a href="#PuzzleBatch.__init__-80"><span class="linenos">80</span></a><span class="sd">            grid_size (tuple of int): Dimensions of the puzzle grid as (rows, columns).</span>
+</span><span id="PuzzleBatch.__init__-81"><a href="#PuzzleBatch.__init__-81"><span class="linenos">81</span></a>
+</span><span id="PuzzleBatch.__init__-82"><a href="#PuzzleBatch.__init__-82"><span class="linenos">82</span></a><span class="sd">            nb_attempts (int, optional): Number of attempts to generate a solvable puzzle for each</span>
+</span><span id="PuzzleBatch.__init__-83"><a href="#PuzzleBatch.__init__-83"><span class="linenos">83</span></a><span class="sd">                combination of blocks and colors. If no valid puzzle is found after these attempts,</span>
+</span><span id="PuzzleBatch.__init__-84"><a href="#PuzzleBatch.__init__-84"><span class="linenos">84</span></a><span class="sd">                no puzzle is generated for that combination. Default is 5.</span>
+</span><span id="PuzzleBatch.__init__-85"><a href="#PuzzleBatch.__init__-85"><span class="linenos">85</span></a>
+</span><span id="PuzzleBatch.__init__-86"><a href="#PuzzleBatch.__init__-86"><span class="linenos">86</span></a><span class="sd">            stack_probability (float, optional): Probability to stack blocks vertically during generation.</span>
+</span><span id="PuzzleBatch.__init__-87"><a href="#PuzzleBatch.__init__-87"><span class="linenos">87</span></a><span class="sd">                Default is 0.75.</span>
+</span><span id="PuzzleBatch.__init__-88"><a href="#PuzzleBatch.__init__-88"><span class="linenos">88</span></a><span class="sd">            blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.</span>
+</span><span id="PuzzleBatch.__init__-89"><a href="#PuzzleBatch.__init__-89"><span class="linenos">89</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch.__init__-90"><a href="#PuzzleBatch.__init__-90"><span class="linenos">90</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span> <span class="o">=</span> <span class="n">PuzzleBatchGenerator</span><span class="p">(</span>
+</span><span id="PuzzleBatch.__init__-91"><a href="#PuzzleBatch.__init__-91"><span class="linenos">91</span></a>            <span class="n">blocks_range</span><span class="p">,</span> <span class="n">colors_range</span><span class="p">,</span> <span class="n">colors_blocks</span><span class="p">,</span> <span class="n">nb_moves</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">nb_attempts</span><span class="p">,</span> <span class="n">stack_probability</span><span class="p">,</span> <span class="n">blocks_gap</span>
+</span><span id="PuzzleBatch.__init__-92"><a href="#PuzzleBatch.__init__-92"><span class="linenos">92</span></a>        <span class="p">)</span>
+</span><span id="PuzzleBatch.__init__-93"><a href="#PuzzleBatch.__init__-93"><span class="linenos">93</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">False</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Frontend interface to generate a batch of puzzles.</p>
+            <div class="docstring"><p>Initialize the batch puzzle generator.</p>
 
-<p>Args:
-    blocks_range (tuple): (min, max) number of blocks.
-    colors_range (tuple): (min, max) number of colors.
-    colors_blocks (list): List of possible colors.
-    nb_moves (int): Number of moves to solve.
-    grid_size (tuple): Grid size (rows, columns).
-    stack_probability (float): Probability to stack blocks.</p>
+<p>Args:</p>
+
+<pre><code>blocks_range (tuple of int): Range of block counts to iterate over as (min_blocks, max_blocks).
+    For each block count in this range, puzzles will be generated.
+
+colors_range (tuple of int): Range of color counts to iterate over as (min_colors, max_colors).
+    For each color count in this range, puzzles will be generated.
+
+colors_blocks (list of str): Pool of possible block colors to choose from.
+
+nb_moves (int): Maximum number of moves allowed in the optimal solution.
+    The generator attempts to create puzzles solvable within this limit.
+
+grid_size (tuple of int): Dimensions of the puzzle grid as (rows, columns).
+
+nb_attempts (int, optional): Number of attempts to generate a solvable puzzle for each
+    combination of blocks and colors. If no valid puzzle is found after these attempts,
+    no puzzle is generated for that combination. Default is 5.
+
+stack_probability (float, optional): Probability to stack blocks vertically during generation.
+    Default is 0.75.
+blocks_gap (int, optional): Maximum allowed gap between blocks during generation (e.g., 1 means at most one empty cell). Default is 1.
+</code></pre>
 </div>
 
 
@@ -559,15 +705,15 @@
 
     </div>
     <a class="headerlink" href="#PuzzleBatch.generate"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.generate-61"><a href="#PuzzleBatch.generate-61"><span class="linenos">61</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="PuzzleBatch.generate-62"><a href="#PuzzleBatch.generate-62"><span class="linenos">62</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate the batch of puzzles.&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch.generate-63"><a href="#PuzzleBatch.generate-63"><span class="linenos">63</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">generate_puzzles</span><span class="p">()</span>
-</span><span id="PuzzleBatch.generate-64"><a href="#PuzzleBatch.generate-64"><span class="linenos">64</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">compute_stats</span><span class="p">()</span>
-</span><span id="PuzzleBatch.generate-65"><a href="#PuzzleBatch.generate-65"><span class="linenos">65</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">True</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.generate-95"><a href="#PuzzleBatch.generate-95"><span class="linenos">95</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="PuzzleBatch.generate-96"><a href="#PuzzleBatch.generate-96"><span class="linenos">96</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate a batch of puzzles based on the configured parameter ranges.&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch.generate-97"><a href="#PuzzleBatch.generate-97"><span class="linenos">97</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">generate_puzzles</span><span class="p">()</span>
+</span><span id="PuzzleBatch.generate-98"><a href="#PuzzleBatch.generate-98"><span class="linenos">98</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">compute_stats</span><span class="p">()</span>
+</span><span id="PuzzleBatch.generate-99"><a href="#PuzzleBatch.generate-99"><span class="linenos">99</span></a>        <span class="bp">self</span><span class="o">.</span><span class="n">generated</span> <span class="o">=</span> <span class="kc">True</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Generate the batch of puzzles.</p>
+            <div class="docstring"><p>Generate a batch of puzzles based on the configured parameter ranges.</p>
 </div>
 
 
@@ -583,16 +729,16 @@
 
     </div>
     <a class="headerlink" href="#PuzzleBatch.show_stats"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.show_stats-67"><a href="#PuzzleBatch.show_stats-67"><span class="linenos">67</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-</span><span id="PuzzleBatch.show_stats-68"><a href="#PuzzleBatch.show_stats-68"><span class="linenos">68</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display batch statistics (bar chart, pie chart).&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch.show_stats-69"><a href="#PuzzleBatch.show_stats-69"><span class="linenos">69</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
-</span><span id="PuzzleBatch.show_stats-70"><a href="#PuzzleBatch.show_stats-70"><span class="linenos">70</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_charts</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-</span><span id="PuzzleBatch.show_stats-71"><a href="#PuzzleBatch.show_stats-71"><span class="linenos">71</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="PuzzleBatch.show_stats-72"><a href="#PuzzleBatch.show_stats-72"><span class="linenos">72</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.show_stats-101"><a href="#PuzzleBatch.show_stats-101"><span class="linenos">101</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">show_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span id="PuzzleBatch.show_stats-102"><a href="#PuzzleBatch.show_stats-102"><span class="linenos">102</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Display statistical charts for the generated batch (e.g., bar chart and pie chart).&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch.show_stats-103"><a href="#PuzzleBatch.show_stats-103"><span class="linenos">103</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
+</span><span id="PuzzleBatch.show_stats-104"><a href="#PuzzleBatch.show_stats-104"><span class="linenos">104</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_charts</span><span class="p">(</span><span class="n">show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span><span id="PuzzleBatch.show_stats-105"><a href="#PuzzleBatch.show_stats-105"><span class="linenos">105</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="PuzzleBatch.show_stats-106"><a href="#PuzzleBatch.show_stats-106"><span class="linenos">106</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Display batch statistics (bar chart, pie chart).</p>
+            <div class="docstring"><p>Display statistical charts for the generated batch (e.g., bar chart and pie chart).</p>
 </div>
 
 
@@ -608,17 +754,25 @@
 
     </div>
     <a class="headerlink" href="#PuzzleBatch.save_pdf"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.save_pdf-74"><a href="#PuzzleBatch.save_pdf-74"><span class="linenos">74</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-</span><span id="PuzzleBatch.save_pdf-75"><a href="#PuzzleBatch.save_pdf-75"><span class="linenos">75</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Save all batch grids as a PDF file.&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch.save_pdf-76"><a href="#PuzzleBatch.save_pdf-76"><span class="linenos">76</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
-</span><span id="PuzzleBatch.save_pdf-77"><a href="#PuzzleBatch.save_pdf-77"><span class="linenos">77</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_and_save_batch</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="PuzzleBatch.save_pdf-78"><a href="#PuzzleBatch.save_pdf-78"><span class="linenos">78</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PDF saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="PuzzleBatch.save_pdf-79"><a href="#PuzzleBatch.save_pdf-79"><span class="linenos">79</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="PuzzleBatch.save_pdf-80"><a href="#PuzzleBatch.save_pdf-80"><span class="linenos">80</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.save_pdf-108"><a href="#PuzzleBatch.save_pdf-108"><span class="linenos">108</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_pdf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+</span><span id="PuzzleBatch.save_pdf-109"><a href="#PuzzleBatch.save_pdf-109"><span class="linenos">109</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch.save_pdf-110"><a href="#PuzzleBatch.save_pdf-110"><span class="linenos">110</span></a><span class="sd">        Export all puzzle grids in the batch as a PDF.</span>
+</span><span id="PuzzleBatch.save_pdf-111"><a href="#PuzzleBatch.save_pdf-111"><span class="linenos">111</span></a>
+</span><span id="PuzzleBatch.save_pdf-112"><a href="#PuzzleBatch.save_pdf-112"><span class="linenos">112</span></a><span class="sd">        Args:</span>
+</span><span id="PuzzleBatch.save_pdf-113"><a href="#PuzzleBatch.save_pdf-113"><span class="linenos">113</span></a><span class="sd">            filename (str): Output filename for the PDF.</span>
+</span><span id="PuzzleBatch.save_pdf-114"><a href="#PuzzleBatch.save_pdf-114"><span class="linenos">114</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch.save_pdf-115"><a href="#PuzzleBatch.save_pdf-115"><span class="linenos">115</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
+</span><span id="PuzzleBatch.save_pdf-116"><a href="#PuzzleBatch.save_pdf-116"><span class="linenos">116</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">print_and_save_batch</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="PuzzleBatch.save_pdf-117"><a href="#PuzzleBatch.save_pdf-117"><span class="linenos">117</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PDF saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="PuzzleBatch.save_pdf-118"><a href="#PuzzleBatch.save_pdf-118"><span class="linenos">118</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="PuzzleBatch.save_pdf-119"><a href="#PuzzleBatch.save_pdf-119"><span class="linenos">119</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Save all batch grids as a PDF file.</p>
+            <div class="docstring"><p>Export all puzzle grids in the batch as a PDF.</p>
+
+<p>Args:
+    filename (str): Output filename for the PDF.</p>
 </div>
 
 
@@ -634,17 +788,25 @@
 
     </div>
     <a class="headerlink" href="#PuzzleBatch.save_csv"></a>
-            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.save_csv-82"><a href="#PuzzleBatch.save_csv-82"><span class="linenos">82</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-</span><span id="PuzzleBatch.save_csv-83"><a href="#PuzzleBatch.save_csv-83"><span class="linenos">83</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;Save batch data as a CSV file.&quot;&quot;&quot;</span>
-</span><span id="PuzzleBatch.save_csv-84"><a href="#PuzzleBatch.save_csv-84"><span class="linenos">84</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
-</span><span id="PuzzleBatch.save_csv-85"><a href="#PuzzleBatch.save_csv-85"><span class="linenos">85</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">save_results_as_csv</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
-</span><span id="PuzzleBatch.save_csv-86"><a href="#PuzzleBatch.save_csv-86"><span class="linenos">86</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CSV saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-</span><span id="PuzzleBatch.save_csv-87"><a href="#PuzzleBatch.save_csv-87"><span class="linenos">87</span></a>        <span class="k">else</span><span class="p">:</span>
-</span><span id="PuzzleBatch.save_csv-88"><a href="#PuzzleBatch.save_csv-88"><span class="linenos">88</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
+            <div class="pdoc-code codehilite"><pre><span></span><span id="PuzzleBatch.save_csv-121"><a href="#PuzzleBatch.save_csv-121"><span class="linenos">121</span></a>    <span class="k">def</span><span class="w"> </span><span class="nf">save_csv</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+</span><span id="PuzzleBatch.save_csv-122"><a href="#PuzzleBatch.save_csv-122"><span class="linenos">122</span></a><span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch.save_csv-123"><a href="#PuzzleBatch.save_csv-123"><span class="linenos">123</span></a><span class="sd">        Export puzzle metadata and configuration results as a CSV file.</span>
+</span><span id="PuzzleBatch.save_csv-124"><a href="#PuzzleBatch.save_csv-124"><span class="linenos">124</span></a>
+</span><span id="PuzzleBatch.save_csv-125"><a href="#PuzzleBatch.save_csv-125"><span class="linenos">125</span></a><span class="sd">        Args:</span>
+</span><span id="PuzzleBatch.save_csv-126"><a href="#PuzzleBatch.save_csv-126"><span class="linenos">126</span></a><span class="sd">            filename (str): Output filename for the CSV.</span>
+</span><span id="PuzzleBatch.save_csv-127"><a href="#PuzzleBatch.save_csv-127"><span class="linenos">127</span></a><span class="sd">        &quot;&quot;&quot;</span>
+</span><span id="PuzzleBatch.save_csv-128"><a href="#PuzzleBatch.save_csv-128"><span class="linenos">128</span></a>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">generated</span><span class="p">:</span>
+</span><span id="PuzzleBatch.save_csv-129"><a href="#PuzzleBatch.save_csv-129"><span class="linenos">129</span></a>            <span class="bp">self</span><span class="o">.</span><span class="n">generator</span><span class="o">.</span><span class="n">save_results_as_csv</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+</span><span id="PuzzleBatch.save_csv-130"><a href="#PuzzleBatch.save_csv-130"><span class="linenos">130</span></a>            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CSV saved as </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="PuzzleBatch.save_csv-131"><a href="#PuzzleBatch.save_csv-131"><span class="linenos">131</span></a>        <span class="k">else</span><span class="p">:</span>
+</span><span id="PuzzleBatch.save_csv-132"><a href="#PuzzleBatch.save_csv-132"><span class="linenos">132</span></a>            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Batch not generated.&quot;</span><span class="p">)</span>
 </span></pre></div>
 
 
-            <div class="docstring"><p>Save batch data as a CSV file.</p>
+            <div class="docstring"><p>Export puzzle metadata and configuration results as a CSV file.</p>
+
+<p>Args:
+    filename (str): Output filename for the CSV.</p>
 </div>
 
 
