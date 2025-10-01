@@ -4,9 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "puzzlegen"
-version = "0.1.6"
+version = "0.1.10"
 authors = [
-    { name="Caroline DAKOURE", email="caroline.dakoure@umontreal.ca" }
+    { name="Caroline DAKOURE", email="caroline.dakoure@umontreal.ca" },
+    { name="Katie LAVIGNE", email="katie.lavigne@mcgill.ca" },
 ]
 description = "Procedural Match-3 Puzzle Generator and Solver"
 readme = "README.md"
