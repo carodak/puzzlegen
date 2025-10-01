@@ -1,8 +1,7 @@
 # puzzlegen - Procedural Match-3 Puzzle Generator 
-Developed by Caroline DAKOURE
 
 **Project Links:**  
-[GitHub Repository](https://github.com/carodak/puzzlegen/) | [PyPI Project](https://pypi.org/project/puzzlegen/) | [OSF Project](https://doi.org/10.17605/OSF.IO/HNAQ9)
+[GitHub Repository](https://github.com/carodak/puzzlegen/) | [PyPI Project](https://pypi.org/project/puzzlegen/) | [OSF Project](https://doi.org/10.17605/OSF.IO/HNAQ9) | [Preprint](https://osf.io/preprints/psyarxiv/bysa2_v1)
 
 ## Overview
 
@@ -130,6 +129,12 @@ Executive Function Task Reference: https://osf.io/3pz74/wiki/home/
 ## API Documentation
 
 The API Documentation is available at https://carodak.github.io/puzzlegen/puzzlegen.html or in `docs` folder.
+
+---
+## Authors
+
+- **Caroline DAKOURE** – Development
+- **Katie LAVIGNE** – Code review, feedback, and improvements
 
 ---
 
